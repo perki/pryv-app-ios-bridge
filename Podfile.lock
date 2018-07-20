@@ -1,0 +1,50 @@
+PODS:
+  - PryvApiKit (0.0.4):
+    - PryvApiKit/API (= 0.0.4)
+    - PryvApiKit/Authorization (= 0.0.4)
+    - PryvApiKit/Filter (= 0.0.4)
+    - PryvApiKit/Model (= 0.0.4)
+    - PryvApiKit/Utils (= 0.0.4)
+  - PryvApiKit/API (0.0.4):
+    - PryvApiKit/API/Cache (= 0.0.4)
+    - PryvApiKit/API/Online (= 0.0.4)
+  - PryvApiKit/API/Cache (0.0.4)
+  - PryvApiKit/API/Online (0.0.4)
+  - PryvApiKit/Authorization (0.0.4)
+  - PryvApiKit/Filter (0.0.4)
+  - PryvApiKit/Model (0.0.4):
+    - PryvApiKit/Model/DataTypes (= 0.0.4)
+  - PryvApiKit/Model/DataTypes (0.0.4):
+    - PryvApiKit/Model/DataTypes/Numerical (= 0.0.4)
+  - PryvApiKit/Model/DataTypes/Numerical (0.0.4)
+  - PryvApiKit/Utils (0.0.4):
+    - PryvApiKit/Utils/CWLSynthesizeSingleton (= 0.0.4)
+    - PryvApiKit/Utils/Reachability (= 0.0.4)
+  - PryvApiKit/Utils/CWLSynthesizeSingleton (0.0.4)
+  - PryvApiKit/Utils/Reachability (0.0.4)
+  - SSKeychain (1.4.1)
+
+DEPENDENCIES:
+  - PryvApiKit (from `https://github.com/pryv/lib-cocoa.git`)
+  - SSKeychain
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - SSKeychain
+
+EXTERNAL SOURCES:
+  PryvApiKit:
+    :git: https://github.com/pryv/lib-cocoa.git
+
+CHECKOUT OPTIONS:
+  PryvApiKit:
+    :commit: c6d73e7e229521b97b209fe1b809bca351948557
+    :git: https://github.com/pryv/lib-cocoa.git
+
+SPEC CHECKSUMS:
+  PryvApiKit: 6cbb975176076cf99ea95601c3d41dfde8f92de8
+  SSKeychain: 55cc80f66f5c73da827e3077f02e43528897db41
+
+PODFILE CHECKSUM: c954a02e5b5bf829110e599f51b898f4798b4031
+
+COCOAPODS: 1.5.3

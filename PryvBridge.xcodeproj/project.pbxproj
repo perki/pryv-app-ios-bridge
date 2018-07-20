@@ -1,0 +1,510 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4E8BB2A71BF3328700D73F46 /* PryvController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E8BB2A61BF3328700D73F46 /* PryvController.m */; };
+		4ED1F9151AB0630800B5B56E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED1F9141AB0630800B5B56E /* main.m */; };
+		4ED1F9181AB0630800B5B56E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED1F9171AB0630800B5B56E /* AppDelegate.m */; };
+		4ED1F91B1AB0630800B5B56E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED1F91A1AB0630800B5B56E /* ViewController.m */; };
+		4ED1F91E1AB0630800B5B56E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4ED1F91C1AB0630800B5B56E /* Main.storyboard */; };
+		4ED1F9201AB0630800B5B56E /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4ED1F91F1AB0630800B5B56E /* Images.xcassets */; };
+		4ED1F9231AB0630800B5B56E /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4ED1F9211AB0630800B5B56E /* LaunchScreen.xib */; };
+		4ED1F92F1AB0630800B5B56E /* PryvBridgeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED1F92E1AB0630800B5B56E /* PryvBridgeTests.m */; };
+		F6BF85E249F8DF2234DA6525 /* libPods-PryvBridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73BF15DB26339C295907937F /* libPods-PryvBridge.a */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		4ED1F9291AB0630800B5B56E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 4ED1F9071AB0630800B5B56E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 4ED1F90E1AB0630800B5B56E;
+			remoteInfo = PryvBridge;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		4E8BB2A51BF3328700D73F46 /* PryvController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvController.h; sourceTree = "<group>"; };
+		4E8BB2A61BF3328700D73F46 /* PryvController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvController.m; sourceTree = "<group>"; };
+		4ED1F90F1AB0630800B5B56E /* PryvBridge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PryvBridge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		4ED1F9131AB0630800B5B56E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4ED1F9141AB0630800B5B56E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		4ED1F9161AB0630800B5B56E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		4ED1F9171AB0630800B5B56E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		4ED1F9191AB0630800B5B56E /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		4ED1F91A1AB0630800B5B56E /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		4ED1F91D1AB0630800B5B56E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4ED1F91F1AB0630800B5B56E /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		4ED1F9221AB0630800B5B56E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		4ED1F9281AB0630800B5B56E /* PryvBridgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PryvBridgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		4ED1F92D1AB0630800B5B56E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4ED1F92E1AB0630800B5B56E /* PryvBridgeTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PryvBridgeTests.m; sourceTree = "<group>"; };
+		73BF15DB26339C295907937F /* libPods-PryvBridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PryvBridge.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BEFDAB9A73C15D17555EEE1 /* Pods-PryvBridge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PryvBridge.release.xcconfig"; path = "Pods/Target Support Files/Pods-PryvBridge/Pods-PryvBridge.release.xcconfig"; sourceTree = "<group>"; };
+		B8E8A548865C3A8DB3EB5687 /* Pods-PryvBridge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PryvBridge.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PryvBridge/Pods-PryvBridge.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4ED1F90C1AB0630800B5B56E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F6BF85E249F8DF2234DA6525 /* libPods-PryvBridge.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4ED1F9251AB0630800B5B56E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4ED1F9061AB0630800B5B56E = {
+			isa = PBXGroup;
+			children = (
+				4ED1F9111AB0630800B5B56E /* PryvBridge */,
+				4ED1F92B1AB0630800B5B56E /* PryvBridgeTests */,
+				4ED1F9101AB0630800B5B56E /* Products */,
+				98005457F8CFFFBF9598548E /* Pods */,
+				E295A8B949780A6123EC73B1 /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		4ED1F9101AB0630800B5B56E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4ED1F90F1AB0630800B5B56E /* PryvBridge.app */,
+				4ED1F9281AB0630800B5B56E /* PryvBridgeTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4ED1F9111AB0630800B5B56E /* PryvBridge */ = {
+			isa = PBXGroup;
+			children = (
+				4ED1F9161AB0630800B5B56E /* AppDelegate.h */,
+				4ED1F9171AB0630800B5B56E /* AppDelegate.m */,
+				4E8BB2A51BF3328700D73F46 /* PryvController.h */,
+				4E8BB2A61BF3328700D73F46 /* PryvController.m */,
+				4ED1F9191AB0630800B5B56E /* ViewController.h */,
+				4ED1F91A1AB0630800B5B56E /* ViewController.m */,
+				4ED1F91C1AB0630800B5B56E /* Main.storyboard */,
+				4ED1F91F1AB0630800B5B56E /* Images.xcassets */,
+				4ED1F9211AB0630800B5B56E /* LaunchScreen.xib */,
+				4ED1F9121AB0630800B5B56E /* Supporting Files */,
+			);
+			path = PryvBridge;
+			sourceTree = "<group>";
+		};
+		4ED1F9121AB0630800B5B56E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4ED1F9131AB0630800B5B56E /* Info.plist */,
+				4ED1F9141AB0630800B5B56E /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		4ED1F92B1AB0630800B5B56E /* PryvBridgeTests */ = {
+			isa = PBXGroup;
+			children = (
+				4ED1F92E1AB0630800B5B56E /* PryvBridgeTests.m */,
+				4ED1F92C1AB0630800B5B56E /* Supporting Files */,
+			);
+			path = PryvBridgeTests;
+			sourceTree = "<group>";
+		};
+		4ED1F92C1AB0630800B5B56E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				4ED1F92D1AB0630800B5B56E /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		98005457F8CFFFBF9598548E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				B8E8A548865C3A8DB3EB5687 /* Pods-PryvBridge.debug.xcconfig */,
+				8BEFDAB9A73C15D17555EEE1 /* Pods-PryvBridge.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E295A8B949780A6123EC73B1 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				73BF15DB26339C295907937F /* libPods-PryvBridge.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4ED1F90E1AB0630800B5B56E /* PryvBridge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4ED1F9321AB0630800B5B56E /* Build configuration list for PBXNativeTarget "PryvBridge" */;
+			buildPhases = (
+				B62A3A60FBE5C22778B8ACE4 /* [CP] Check Pods Manifest.lock */,
+				4ED1F90B1AB0630800B5B56E /* Sources */,
+				4ED1F90C1AB0630800B5B56E /* Frameworks */,
+				4ED1F90D1AB0630800B5B56E /* Resources */,
+				57F5DF61FBA3FDC335CAC356 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PryvBridge;
+			productName = PryvBridge;
+			productReference = 4ED1F90F1AB0630800B5B56E /* PryvBridge.app */;
+			productType = "com.apple.product-type.application";
+		};
+		4ED1F9271AB0630800B5B56E /* PryvBridgeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4ED1F9351AB0630800B5B56E /* Build configuration list for PBXNativeTarget "PryvBridgeTests" */;
+			buildPhases = (
+				4ED1F9241AB0630800B5B56E /* Sources */,
+				4ED1F9251AB0630800B5B56E /* Frameworks */,
+				4ED1F9261AB0630800B5B56E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				4ED1F92A1AB0630800B5B56E /* PBXTargetDependency */,
+			);
+			name = PryvBridgeTests;
+			productName = PryvBridgeTests;
+			productReference = 4ED1F9281AB0630800B5B56E /* PryvBridgeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4ED1F9071AB0630800B5B56E /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0720;
+				ORGANIZATIONNAME = Pryv;
+				TargetAttributes = {
+					4ED1F90E1AB0630800B5B56E = {
+						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = GNL8PH5553;
+					};
+					4ED1F9271AB0630800B5B56E = {
+						CreatedOnToolsVersion = 6.1.1;
+						TestTargetID = 4ED1F90E1AB0630800B5B56E;
+					};
+				};
+			};
+			buildConfigurationList = 4ED1F90A1AB0630800B5B56E /* Build configuration list for PBXProject "PryvBridge" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 4ED1F9061AB0630800B5B56E;
+			productRefGroup = 4ED1F9101AB0630800B5B56E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4ED1F90E1AB0630800B5B56E /* PryvBridge */,
+				4ED1F9271AB0630800B5B56E /* PryvBridgeTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		4ED1F90D1AB0630800B5B56E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4ED1F91E1AB0630800B5B56E /* Main.storyboard in Resources */,
+				4ED1F9231AB0630800B5B56E /* LaunchScreen.xib in Resources */,
+				4ED1F9201AB0630800B5B56E /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4ED1F9261AB0630800B5B56E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		57F5DF61FBA3FDC335CAC356 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-PryvBridge/Pods-PryvBridge-resources.sh",
+				"${PODS_ROOT}/SSKeychain/Support/SSKeychain.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/SSKeychain.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PryvBridge/Pods-PryvBridge-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B62A3A60FBE5C22778B8ACE4 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PryvBridge-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4ED1F90B1AB0630800B5B56E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4E8BB2A71BF3328700D73F46 /* PryvController.m in Sources */,
+				4ED1F91B1AB0630800B5B56E /* ViewController.m in Sources */,
+				4ED1F9181AB0630800B5B56E /* AppDelegate.m in Sources */,
+				4ED1F9151AB0630800B5B56E /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		4ED1F9241AB0630800B5B56E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4ED1F92F1AB0630800B5B56E /* PryvBridgeTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		4ED1F92A1AB0630800B5B56E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 4ED1F90E1AB0630800B5B56E /* PryvBridge */;
+			targetProxy = 4ED1F9291AB0630800B5B56E /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		4ED1F91C1AB0630800B5B56E /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4ED1F91D1AB0630800B5B56E /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		4ED1F9211AB0630800B5B56E /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				4ED1F9221AB0630800B5B56E /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		4ED1F9301AB0630800B5B56E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		4ED1F9311AB0630800B5B56E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		4ED1F9331AB0630800B5B56E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B8E8A548865C3A8DB3EB5687 /* Pods-PryvBridge.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = GNL8PH5553;
+				INFOPLIST_FILE = PryvBridge/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		4ED1F9341AB0630800B5B56E /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8BEFDAB9A73C15D17555EEE1 /* Pods-PryvBridge.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = GNL8PH5553;
+				INFOPLIST_FILE = PryvBridge/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		4ED1F9361AB0630800B5B56E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PryvBridgeTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PryvBridge.app/PryvBridge";
+			};
+			name = Debug;
+		};
+		4ED1F9371AB0630800B5B56E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = PryvBridgeTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.pryv.$(PRODUCT_NAME:rfc1034identifier)";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PryvBridge.app/PryvBridge";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4ED1F90A1AB0630800B5B56E /* Build configuration list for PBXProject "PryvBridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4ED1F9301AB0630800B5B56E /* Debug */,
+				4ED1F9311AB0630800B5B56E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4ED1F9321AB0630800B5B56E /* Build configuration list for PBXNativeTarget "PryvBridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4ED1F9331AB0630800B5B56E /* Debug */,
+				4ED1F9341AB0630800B5B56E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4ED1F9351AB0630800B5B56E /* Build configuration list for PBXNativeTarget "PryvBridgeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4ED1F9361AB0630800B5B56E /* Debug */,
+				4ED1F9371AB0630800B5B56E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4ED1F9071AB0630800B5B56E /* Project object */;
+}
