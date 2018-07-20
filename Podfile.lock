@@ -1,4 +1,5 @@
 PODS:
+  - INTULocationManager (4.3.0)
   - PryvApiKit (0.0.4):
     - PryvApiKit/API (= 0.0.4)
     - PryvApiKit/Authorization (= 0.0.4)
@@ -25,11 +26,13 @@ PODS:
   - SSKeychain (1.4.1)
 
 DEPENDENCIES:
+  - INTULocationManager (~> 4.3.0)
   - PryvApiKit (from `https://github.com/pryv/lib-cocoa.git`)
   - SSKeychain
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - INTULocationManager
     - SSKeychain
 
 EXTERNAL SOURCES:
@@ -42,9 +45,10 @@ CHECKOUT OPTIONS:
     :git: https://github.com/pryv/lib-cocoa.git
 
 SPEC CHECKSUMS:
+  INTULocationManager: 0ca5c76eacc029ba15938fc699520bc333ed6435
   PryvApiKit: 6cbb975176076cf99ea95601c3d41dfde8f92de8
   SSKeychain: 55cc80f66f5c73da827e3077f02e43528897db41
 
-PODFILE CHECKSUM: c954a02e5b5bf829110e599f51b898f4798b4031
+PODFILE CHECKSUM: 02d9bafce77a0a365c676fbf2f6dd7582153590e
 
 COCOAPODS: 1.5.3

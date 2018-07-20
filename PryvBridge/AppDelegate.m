@@ -7,6 +7,8 @@
 //
 
 #import "AppDelegate.h"
+#import "INTULocationManager.h"
+#import "PryvController.h"
 
 @interface AppDelegate ()
 
@@ -17,6 +19,19 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
+    
+    // If you start monitoring significant location changes and your app is subsequently terminated, the system automatically relaunches the app into the background if a new event arrives.
+    // Upon relaunch, you must still subscribe to significant location changes to continue receiving location events.
+    if ([launchOptions objectForKey:UIApplicationLaunchOptionsLocationKey]) {
+        INTULocationManager *locMgr = [INTULocationManager sharedInstance];
+        [locMgr subscribeToSignificantLocationChangesWithBlock:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
+            if (status == INTULocationStatusSuccess) {
+                [[PryvController sharedInstance] saveLocation:currentLocation];
+            }
+        }];
+    }
+    
+    
     return YES;
 }
 

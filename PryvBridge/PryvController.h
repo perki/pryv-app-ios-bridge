@@ -8,19 +8,22 @@
 
 #import <Foundation/Foundation.h>
 
+#import <CoreLocation/CoreLocation.h>
+
 @class PYConnection;
 
 
 // the two following strings are used to retrieve infos from NSUserDefaults
-#define kServiceName @"com.pryv.exampleapp"
+#define kServiceName @"com.pryv.app-ios-bridge"
 #define kLastUsedUsernameKey @"lastUsedUsernameKey"
 
 // the streamID we will use for tests
-#define kStreamId @"com.pryv.exampleapp.stream"
-#define kStreamDefaultName @"Pryv iOS PryvBridge"
+#define kStreamId @"location"
+#define kStreamDefaultName @"Location"
 
 // Event driven notification
 #define kAppPryvConnectionChange  @"kAppPryvConnectionChange"
+#define kAppNewLocationSaved  @"kAppNewLocationSaved"
 
 @interface PryvController : NSObject
 
@@ -28,5 +31,7 @@
 
 @property (nonatomic, retain) PYConnection *connection;
 
+- (void) saveLocation:(CLLocation *)currentLocation;
+- (NSInteger) savedLocationEvents;
 
 @end

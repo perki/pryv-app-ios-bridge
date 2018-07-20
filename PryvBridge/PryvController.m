@@ -21,12 +21,40 @@
 - (void)loadSavedConnection;
 + (void)saveConnection:(PYConnection *)connection;
 + (void)removeConnection:(PYConnection *)connection;
+
 @end
 
 
 @implementation PryvController
 
+NSInteger savedEventsCount;
+
 @synthesize connection = _connection;
+
+- (NSInteger) savedLocationEvents
+{
+    return savedEventsCount;
+}
+
+- (void) saveLocation:(CLLocation *)currentLocation {
+    if (! self.connection) return;
+    PYEvent *event = [[PYEvent alloc] init];
+    event.streamId = kStreamId;
+    event.type = @"position/wgs84";
+    event.eventContent = @{ @"latitude": [NSNumber numberWithFloat:currentLocation.coordinate.latitude],
+                            @"longitude": [NSNumber numberWithFloat:currentLocation.coordinate.longitude] };
+
+    [self.connection eventCreate:event andCacheFirst:YES
+                     successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *event) {
+                         NSLog(@"Logged position");
+                         savedEventsCount++;
+                          [[NSNotificationCenter defaultCenter] postNotificationName:kAppNewLocationSaved object:nil];
+                     } errorHandler:^(NSError *error) {
+                         NSLog(@"Error Logging position %@", error);
+                     }];
+}
+
+#pragma -mark specifc is before
 
 + (PryvController*)sharedInstance
 {
@@ -44,6 +72,7 @@
 - (void)initObject
 {
     [self loadSavedConnection];
+    savedEventsCount = 0;
 }
 
 
