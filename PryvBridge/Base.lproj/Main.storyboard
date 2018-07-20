@@ -53,22 +53,45 @@
                                     <action selector="signinButtonPressed:" destination="vXZ-lx-hvc" eventType="touchDown" id="0EM-lo-rmf"/>
                                 </connections>
                             </button>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ddP-IW-jNf">
-                                <rect key="frame" x="11" y="93" width="49" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <action selector="locationSwitchStateChanged:" destination="vXZ-lx-hvc" eventType="valueChanged" id="6ef-LS-QXY"/>
-                                </connections>
-                            </switch>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Location Tracker" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VoV-HG-qhg">
-                                <rect key="frame" x="66" y="98" width="232" height="21"/>
+                                <rect key="frame" x="107" y="98" width="191" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U3D-M2-haO">
-                                <rect key="frame" x="317" y="98" width="11" height="21"/>
+                                <rect key="frame" x="317" y="98" width="42" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="l6l-5q-2jS">
+                                <rect key="frame" x="317" y="155" width="42" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="az0-Wu-N34">
+                                <rect key="frame" x="7" y="149" width="87" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Authorize"/>
+                                <connections>
+                                    <action selector="healthButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="f34-TT-H0b"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pV8-td-ELU">
+                                <rect key="frame" x="7" y="93" width="87" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Authorize"/>
+                                <connections>
+                                    <action selector="locationButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="2TD-iJ-Okk"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="HealthKit Tracker" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4wa-sb-Yjk">
+                                <rect key="frame" x="107" y="154" width="191" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -79,9 +102,12 @@
                     </view>
                     <connections>
                         <outlet property="addNoteButton" destination="mv4-IM-yxg" id="0Pv-s6-X7W"/>
+                        <outlet property="healthButton" destination="az0-Wu-N34" id="40v-Ta-ukL"/>
+                        <outlet property="healthCount" destination="l6l-5q-2jS" id="0GP-48-vP6"/>
+                        <outlet property="healthLabel" destination="4wa-sb-Yjk" id="jwf-2W-tYA"/>
+                        <outlet property="locationButton" destination="pV8-td-ELU" id="1lt-Ay-ZuK"/>
                         <outlet property="locationCount" destination="U3D-M2-haO" id="TMt-cu-09y"/>
                         <outlet property="locationLabel" destination="VoV-HG-qhg" id="Frz-Tf-8oI"/>
-                        <outlet property="locationSwitch" destination="ddP-IW-jNf" id="2dV-T5-JCN"/>
                         <outlet property="signinButton" destination="I9r-bv-Xy0" id="dTq-ly-qvB"/>
                     </connections>
                 </viewController>

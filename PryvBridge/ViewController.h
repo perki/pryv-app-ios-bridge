@@ -15,11 +15,16 @@
 @property (nonatomic, retain) IBOutlet UITableView *eventTable;
 @property (nonatomic, retain) IBOutlet UIButton *addNoteButton;
 @property (nonatomic, retain) IBOutlet UIButton *signinButton;
-@property (nonatomic, retain) IBOutlet UISwitch *locationSwitch;
+@property (nonatomic, retain) IBOutlet UIButton *locationButton;
 @property (nonatomic, retain) IBOutlet UILabel *locationLabel;
 @property (nonatomic, retain) IBOutlet UILabel *locationCount;
 
-- (IBAction)locationSwitchStateChanged:(id)sender;
+@property (nonatomic, retain) IBOutlet UIButton *healthButton;
+@property (nonatomic, retain) IBOutlet UILabel *healthLabel;
+@property (nonatomic, retain) IBOutlet UILabel *healthCount;
+
+- (IBAction)locationButtonPressed:(id)sender;
+- (IBAction)healthButtonPressed:(id)sender;
 
 - (IBAction)signinButtonPressed:(id)sender;
 
