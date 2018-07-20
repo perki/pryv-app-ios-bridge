@@ -14,7 +14,16 @@
 
 @interface HKController ()
 - (void)requestAuthorization;
-- (void)updateHealthKit:(HKObjectType*) objectType withCompletionHandler:(HKObserverQueryCompletionHandler _Nonnull) completionHandler;
+- (void)observeHealthKit;
+- (void)updateDataForSampleType:(HKSampleType *)sampleType;
+- (void)saveAnchors;
+
+
+@property (nonatomic, readonly) NSArray<HKSampleType *> *sampleTypes;
+
+@property (nonatomic, strong) NSMutableDictionary<NSString *, HKQueryAnchor *> *anchorDictionary;
+
+
 @end
 
 
@@ -36,6 +45,15 @@
     return _sharedInstance;
 }
 
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.anchorDictionary = [self _anchorDictFromStorage];
+    }
+    return self;
+}
+
 - (void)initObject
 {
     [self requestAuthorization];
@@ -48,43 +66,106 @@
     }
     self.healthStore = [[HKHealthStore alloc] init];
     
-    NSArray* readTypes = @[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount]];
-    
-
-    
-    [self. healthStore requestAuthorizationToShareTypes:nil readTypes:[NSSet setWithArray:readTypes] completion:^(BOOL success, NSError * _Nullable error) {
+    [self. healthStore requestAuthorizationToShareTypes:nil readTypes:[NSSet setWithArray:[self sampleTypes]] completion:^(BOOL success, NSError * _Nullable error) {
         // no code
     }];
     
-  
-    
-    HKObserverQuery* ob = [[HKObserverQuery alloc] initWithSampleType:readTypes[0] predicate:nil updateHandler:^(HKObserverQuery * _Nonnull query, HKObserverQueryCompletionHandler  _Nonnull completionHandler, NSError * _Nullable error) {
-        if (error == nil) {
-            [self updateHealthKit:readTypes[0] withCompletionHandler:completionHandler];
-        } else {
-            completionHandler();
-        }
-    }];
-    
-    [self.healthStore executeQuery:ob];
-    
-    [self.healthStore enableBackgroundDeliveryForType:readTypes[0] frequency:HKUpdateFrequencyImmediate withCompletion:^(BOOL success, NSError * _Nullable error) {
-        
-        if (success) {
-            NSLog(@"Enabled background delivery of steps changes");
-        } else {
-            NSLog(@"Failed to enable background delivery of steps changes. %@", error);
-        }
-    }];
+    [self observeHealthKit];
     
 }
 
 
-- (void)updateHealthKit:(HKObjectType*) objectType  withCompletionHandler:(HKObserverQueryCompletionHandler _Nonnull) completionHandler; {
-    if (objectType.identifier == HKQuantityTypeIdentifierStepCount) {
-        NSLog(@"************* Got Steps");
-        completionHandler();
+#pragma mark - Public Instance Methods
+
+- (void)observeHealthKit {
+    for (HKSampleType *sample in self.sampleTypes) {
+        if ([self.healthStore authorizationStatusForType:sample] != HKAuthorizationStatusNotDetermined) {
+            HKObserverQuery *observationQuery = [[HKObserverQuery alloc] initWithSampleType:sample predicate:nil
+              updateHandler:^(HKObserverQuery *query, HKObserverQueryCompletionHandler completionHandler, NSError *error) {
+                  if (error)
+                  NSLog(@"Error observing changes to HKSampleType with identifier %@: %@", query.sampleType.identifier, error.localizedDescription);
+                  else {
+                      [[HKController sharedInstance] updateDataForSampleType:query.sampleType];
+                  }
+                  completionHandler();
+              }];
+            
+            [self.healthStore executeQuery:observationQuery];
+            [self.healthStore enableBackgroundDeliveryForType:sample
+                    frequency:HKUpdateFrequencyImmediate
+               withCompletion:^(BOOL success, NSError *error) {
+                   if (!success)
+                   NSLog(@"Error enabling background delivery for HKSampleType with Identifier %@: %@", sample.identifier, error.localizedDescription);
+               }];
+            
+            
+            [self updateDataForSampleType:sample];
+        }
+        
     }
+    
+}
+- (void)updateDataForSampleType:(HKSampleType *)sampleType {
+    
+    HKQueryAnchor *anchor = self.anchorDictionary[sampleType.identifier];
+    NSUInteger limit = HKObjectQueryNoLimit;
+    
+    if (!anchor) {
+        anchor = HKAnchoredObjectQueryNoAnchor;
+        limit = 500;
+        
+    }
+    
+    HKAnchoredObjectQuery *anchoredQuery = [[HKAnchoredObjectQuery alloc] initWithType:sampleType
+                 predicate:nil
+                    anchor:anchor
+                     limit:limit
+            resultsHandler:^(HKAnchoredObjectQuery *query, NSArray<HKSample *> *sampleObjects, NSArray<HKDeletedObject *> *deletedObjects, HKQueryAnchor *newAnchor, NSError *error) {
+                if (!error) {
+                    for (HKSample *sample in sampleObjects) {
+                        // Process Sample
+                        NSLog(@"Sample %@", sample);
+                    }
+                    
+                } else
+                NSLog(@"Error fetching data for HKSampleType with identifier %@: %@", query.sampleType.identifier, error.localizedDescription);
+                
+            }];
+    [self.healthStore executeQuery:anchoredQuery];
+    
+}
+
+- (void)saveAnchors {
+    
+    NSData *anchorData = [NSKeyedArchiver archivedDataWithRootObject:self.anchorDictionary];
+    [[NSUserDefaults standardUserDefaults] setObject:anchorData forKey:@"_anchorDict"];
+    
+}
+
+
+- (NSArray<HKSampleType *> *)sampleTypes {
+    
+    HKQuantityType *steps = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
+    HKQuantityType *distance = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];
+    HKQuantityType *energyBurnedActive = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned];
+    HKQuantityType *energyBurnedResting = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBasalEnergyBurned];
+    HKQuantityType *heartRate = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate];
+    HKQuantityType *bloodPressureSystolic = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
+    HKQuantityType *bloodPressureDiastolic = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic];
+    HKQuantityType *bloodSugar = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodGlucose];
+    
+    return @[steps, distance, energyBurnedActive, energyBurnedResting, energyBurnedActive, heartRate, bloodPressureSystolic, bloodPressureDiastolic, bloodSugar];
+    
+}
+
+#pragma mark - Private Instance Methods
+
+- (NSMutableDictionary<NSString *, HKQueryAnchor *> *)_anchorDictFromStorage {
+    NSData *data = (NSData *)[[NSUserDefaults standardUserDefaults] valueForKey:@"_anchorDict"];
+    if (data)
+        return (NSMutableDictionary<NSString *, HKQueryAnchor *> *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
+
+    return [[NSMutableDictionary<NSString *, HKQueryAnchor *> alloc] init];
 }
 
 @end
