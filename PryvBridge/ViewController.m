@@ -14,8 +14,8 @@
 #import <PryvApiKit/PryvApiKit.h>
 #import "INTULocationManager.h"
 #import <CoreLocation/CoreLocation.h>
+#import "HKController.h"
 
-#import <HealthKit/HealthKit.h>
 
 //
 // Implements PYWebLoginDelegate to be able to use PYWebLoginViewController
@@ -25,6 +25,7 @@
 - (void)pryvLocationSaved:(NSNotification*)notification;
 - (PYConnection*)pyConn;
 - (void)checkLocationStatus;
+
 @end
 
 @implementation ViewController
@@ -72,29 +73,14 @@
     
     // --- Health Kit
     
-    if ([HKHealthStore isHealthDataAvailable] == NO) {
-        // If our device doesn't support HealthKit -> return.
-        return;
-    }
+    [HKController sharedInstance]; // initialize Health Kit 
     
-    NSArray *readTypes = @[[HKObjectType quantityTypeForIdentifier:HKQuantityTypeIdentifierBodyMass]];
-    
-    
-    HKHealthStore* healthStore = [[HKHealthStore alloc] init];
-    [healthStore requestAuthorizationToShareTypes:nil
-                                             readTypes:[NSSet setWithArray:readTypes] completion:nil];
+     
 }
 
-- (NSDate *)readMass {
-    NSError *error;
-    NSDate *dateOfBirth = [self.healthStore dateOfBirthWithError:&error];   // Convenience method of HKHealthStore to get date of birth directly.
-    
-    if (!dateOfBirth) {
-        NSLog(@"Either an error occured fetching the user's age information or none has been stored yet. In your app, try to handle this gracefully.");
-    }
-    
-    return dateOfBirth;
-}
+
+
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
