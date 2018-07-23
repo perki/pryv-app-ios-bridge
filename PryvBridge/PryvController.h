@@ -34,4 +34,6 @@
 - (void) saveLocation:(CLLocation *)currentLocation;
 - (NSInteger) savedLocationEvents;
 
+- (void) registerToLocationEvents;
+
 @end

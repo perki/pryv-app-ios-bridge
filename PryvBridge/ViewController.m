@@ -12,8 +12,6 @@
 #import "PryvController.h"
 
 #import <PryvApiKit/PryvApiKit.h>
-#import "INTULocationManager.h"
-#import <CoreLocation/CoreLocation.h>
 #import "HKController.h"
 
 
@@ -43,17 +41,7 @@
     [super viewDidLoad];
     
     [self checkLocationStatus ];
-    
-    INTULocationManager *locMgr = [INTULocationManager sharedInstance];
-    [locMgr subscribeToSignificantLocationChangesWithBlock:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
-        [self checkLocationStatus ];
-        if (status == INTULocationStatusSuccess) {
-            [[PryvController sharedInstance] saveLocation:currentLocation];
-        }
-    }];
-    
-  
-    
+   
     /**
      * Listen to connection changes
      */
@@ -70,6 +58,8 @@
     
     [self pyConn]; // will trigger loading of existing connection
     
+    // --- Initialize location Event
+    [[PryvController sharedInstance] registerToLocationEvents];
     
     // --- Health Kit
     

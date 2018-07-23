@@ -10,6 +10,7 @@
 #import "SSKeychain.h"  // provided by cocoapod : SSKeychain
 
 #import <PryvApiKit/PryvApiKit.h>
+#import "INTULocationManager.h"
 
 //
 // Implements PYWebLoginDelegate to be able to use PYWebLoginViewController
@@ -28,6 +29,7 @@
 @implementation PryvController
 
 NSInteger savedEventsCount;
+BOOL registeredToLocationEvents = FALSE;
 
 @synthesize connection = _connection;
 
@@ -35,6 +37,18 @@ NSInteger savedEventsCount;
 {
     return savedEventsCount;
 }
+
+- (void) registerToLocationEvents {
+    if (registeredToLocationEvents) return;
+    registeredToLocationEvents = TRUE;
+    INTULocationManager *locMgr = [INTULocationManager sharedInstance];
+    [locMgr subscribeToSignificantLocationChangesWithBlock:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
+        if (status == INTULocationStatusSuccess) {
+            [[PryvController sharedInstance] saveLocation:currentLocation];
+        }
+    }];
+}
+
 
 - (void) saveLocation:(CLLocation *)currentLocation {
     if (! self.connection) return;
