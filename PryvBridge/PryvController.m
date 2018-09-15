@@ -12,6 +12,8 @@
 #import <PryvApiKit/PryvApiKit.h>
 #import "INTULocationManager.h"
 
+#import <CoreLocation/CoreLocation.h>
+
 //
 // Implements PYWebLoginDelegate to be able to use PYWebLoginViewController
 //
@@ -28,8 +30,10 @@
 
 @implementation PryvController
 
+NSInteger registeredBlocks;
 NSInteger savedEventsCount;
 BOOL registeredToLocationEvents = FALSE;
+CLLocation* lastStoredLocation;
 
 @synthesize connection = _connection;
 
@@ -42,8 +46,11 @@ BOOL registeredToLocationEvents = FALSE;
     if (registeredToLocationEvents) return;
     registeredToLocationEvents = TRUE;
     INTULocationManager *locMgr = [INTULocationManager sharedInstance];
+    registeredBlocks++;
+    __block NSInteger num = 0 + registeredBlocks;
     [locMgr subscribeToSignificantLocationChangesWithBlock:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
         if (status == INTULocationStatusSuccess) {
+            NSLog(@"Got location %ld / %ld",num, registeredBlocks);
             [[PryvController sharedInstance] saveLocation:currentLocation];
         }
     }];
@@ -52,11 +59,38 @@ BOOL registeredToLocationEvents = FALSE;
 
 - (void) saveLocation:(CLLocation *)currentLocation {
     if (! self.connection) return;
+    
+    // ignore if not preceise enough
+    
+    if ([NSNumber numberWithFloat:currentLocation.horizontalAccuracy].doubleValue > kMinimalHorizontalAccuracy) {
+     
+        if (lastStoredLocation != nil &&
+            [lastStoredLocation distanceFromLocation:currentLocation] < (currentLocation.horizontalAccuracy * 2)) {
+            // if distance between now and last one is smaller that 2x accurancy .. ignore
+            
+        NSLog(@"Ignoring because of accurancy %d", [NSNumber numberWithFloat:currentLocation.horizontalAccuracy]);
+           return;
+        }
+        if (lastStoredLocation != nil) {
+         NSLog(@"Saved bad accurancy of %d because distance is %d ", [NSNumber numberWithFloat:currentLocation.horizontalAccuracy], [lastStoredLocation distanceFromLocation:currentLocation]);
+        }
+        
+    }
+    
+    lastStoredLocation = currentLocation;
+            
     PYEvent *event = [[PYEvent alloc] init];
     event.streamId = kStreamId;
     event.type = @"position/wgs84";
     event.eventContent = @{ @"latitude": [NSNumber numberWithFloat:currentLocation.coordinate.latitude],
-                            @"longitude": [NSNumber numberWithFloat:currentLocation.coordinate.longitude] };
+                            @"longitude": [NSNumber numberWithFloat:currentLocation.coordinate.longitude],
+                            @"horizontalAccuracy": [NSNumber numberWithFloat:currentLocation.horizontalAccuracy],
+                            @"altitude": [NSNumber numberWithFloat:currentLocation.altitude],
+                            @"verticalAccuracy": [NSNumber numberWithFloat:currentLocation.verticalAccuracy],
+                            @"speed": [NSNumber numberWithFloat:currentLocation.speed],
+                            @"bearing": [NSNumber numberWithFloat:currentLocation.course]
+                            };
+    [event setEventDate:currentLocation.timestamp];
 
     [self.connection eventCreate:event andCacheFirst:YES
                      successHandler:^(NSString *newEventId, NSString *stoppedId, PYEvent *event) {
@@ -87,6 +121,8 @@ BOOL registeredToLocationEvents = FALSE;
 {
     [self loadSavedConnection];
     savedEventsCount = 0;
+    registeredBlocks = 0;
+    lastStoredLocation = nil;
 }
 
 

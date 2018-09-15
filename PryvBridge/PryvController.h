@@ -21,6 +21,9 @@
 #define kStreamId @"location"
 #define kStreamDefaultName @"Location"
 
+// define minimal horizontal accuracy
+#define kMinimalHorizontalAccuracy 500.00
+
 // Event driven notification
 #define kAppPryvConnectionChange  @"kAppPryvConnectionChange"
 #define kAppNewLocationSaved  @"kAppNewLocationSaved"
