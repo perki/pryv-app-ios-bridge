@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-
+#import "PryvHealthKit.h"
 
 #import "HKController.h"
 
@@ -124,7 +124,8 @@
                 if (!error) {
                     for (HKSample *sample in sampleObjects) {
                         // Process Sample
-                        NSLog(@"Sample %@", sample);
+                        // [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle]
+                        [PryvHealthKit sampleToEvent:sample];
                     }
                     
                 } else
