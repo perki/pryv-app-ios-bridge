@@ -39,8 +39,17 @@
 }
 
 
-static id (^quantityCount)(HKSample*) = ^(HKSample* sample) {
+static id (^quantityCountUnit)(HKSample*) = ^(HKSample* sample) {
     return [NSNumber numberWithDouble:[((HKQuantitySample*) sample).quantity doubleValueForUnit:HKUnit.countUnit]];
+};
+
+static id (^quantityMeterUnit)(HKSample*) = ^(HKSample* sample) {
+    return [NSNumber numberWithDouble:[((HKQuantitySample*) sample).quantity doubleValueForUnit:HKUnit.meterUnit]];
+};
+
+static id (^quantityHeartBeatsPerMinuteUnit)(HKSample*) = ^(HKSample* sample) {
+    return [NSNumber numberWithDouble:[((HKQuantitySample*) sample).quantity
+                                       doubleValueForUnit:[HKUnit unitFromString:@"count/min"]]];
 };
 
 static NSDictionary* typeMap;
@@ -52,8 +61,9 @@ static NSDictionary* typeMap;
     __block BOOL init_done = NO;
     dispatch_once(&onceToken, ^{
         typeMap = @{
-                    HKQuantityTypeIdentifierHeartRate: @[@"frequency/bpm", quantityCount],
-                    HKQuantityTypeIdentifierStepCount: @[@"count/step", quantityCount],
+                    HKQuantityTypeIdentifierHeartRate: @[@"frequency/bpm", quantityHeartBeatsPerMinuteUnit],
+                    HKQuantityTypeIdentifierStepCount: @[@"count/step", quantityCountUnit],
+                    HKQuantityTypeIdentifierDistanceWalkingRunning: @[@"length/m", quantityMeterUnit],
         };
         _sharedInstance = [[PryvHealthKit alloc] init];
         init_done = YES;
