@@ -19,37 +19,29 @@
 @implementation PryvHealthKit
 
 + (PYEvent*) sampleToEvent:(HKSample*)sample {
-    
-    NSString* type;
-    id eventContent;
-    
-    id z = [[sample sampleType] identifier];
-    id zz = HKQuantityTypeIdentifierStepCount;
-    
-    
-    if ([[[sample sampleType] identifier] isEqualToString:HKQuantityTypeIdentifierStepCount]) {
-        type = @"count/step";
-        eventContent = [NSNumber numberWithDouble:[((HKQuantitySample*) sample).quantity doubleValueForUnit:HKUnit.countUnit]];
-    }
-    
-    if (type == nil) {
-        NSLog(@"Sample %@ ## %@", sample, [sample sampleType]);
+    [PryvHealthKit sharedInstance];
+  
+    NSString* sampleType = [[sample sampleType] identifier];
+    NSArray* specs = [typeMap objectForKey:sampleType];
+    if (specs == nil) {
+        NSLog(@"Unkown sample %@ ## %@", [sample sampleType], sample);
         return nil;
     }
+    id (^ getContent)(HKSample*) = specs[1];
     
     PYEvent *event = [[PYEvent alloc] init];
     [event setEventDate:[sample startDate]];
     [event setEventEndDate:[sample endDate]];
-    event.type = type;
-    event.eventContent = eventContent;
+    event.type = specs[0];
+    event.eventContent = getContent(sample);
 
     return event;
 }
 
-/**
-static void (^quantityCount)(id) = ^(HKsample* sample) {
-        
-};**/
+
+static id (^quantityCount)(HKSample*) = ^(HKSample* sample) {
+    return [NSNumber numberWithDouble:[((HKQuantitySample*) sample).quantity doubleValueForUnit:HKUnit.countUnit]];
+};
 
 static NSDictionary* typeMap;
 
@@ -60,7 +52,8 @@ static NSDictionary* typeMap;
     __block BOOL init_done = NO;
     dispatch_once(&onceToken, ^{
         typeMap = @{
-            HKQuantityTypeIdentifierStepCount: @[@"count/step", ],
+                    HKQuantityTypeIdentifierHeartRate: @[@"frequency/bpm", quantityCount],
+                    HKQuantityTypeIdentifierStepCount: @[@"count/step", quantityCount],
         };
         _sharedInstance = [[PryvHealthKit alloc] init];
         init_done = YES;
