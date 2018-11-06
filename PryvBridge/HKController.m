@@ -125,7 +125,8 @@
                     for (HKSample *sample in sampleObjects) {
                         // Process Sample
                         // [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle]
-                        [PryvHealthKit sampleToEvent:sample];
+                        PYEvent* e = [[PryvHealthKit sharedInstance] sampleToEvent:sample];
+                        NSLog(@"Created Event: %@ %@", e.type, e.eventContent);
                     }
                     
                 } else
@@ -145,6 +146,8 @@
 
 
 - (NSArray<HKSampleType *> *)sampleTypes {
+    
+    return [[PryvHealthKit sharedInstance] sampleTypes];
     
     HKQuantityType *steps = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
     HKQuantityType *distance = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4E3BF505214D08E900B84AAA /* PryvHealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E3BF504214D08E900B84AAA /* PryvHealthKit.m */; };
+		4E66719E2191FB5C00419660 /* HealthKitPryvDefinitions.json in Resources */ = {isa = PBXBuildFile; fileRef = 4E66719D2191FB5C00419660 /* HealthKitPryvDefinitions.json */; };
 		4E8BB2A71BF3328700D73F46 /* PryvController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4E8BB2A61BF3328700D73F46 /* PryvController.m */; };
 		4ED1F9151AB0630800B5B56E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED1F9141AB0630800B5B56E /* main.m */; };
 		4ED1F9181AB0630800B5B56E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED1F9171AB0630800B5B56E /* AppDelegate.m */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		4E3BF504214D08E900B84AAA /* PryvHealthKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PryvHealthKit.m; sourceTree = "<group>"; };
 		4E3BF506214D090E00B84AAA /* PryvHealthKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PryvHealthKit.h; sourceTree = "<group>"; };
+		4E66719D2191FB5C00419660 /* HealthKitPryvDefinitions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = HealthKitPryvDefinitions.json; sourceTree = "<group>"; };
 		4E8BB2A51BF3328700D73F46 /* PryvController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PryvController.h; sourceTree = "<group>"; };
 		4E8BB2A61BF3328700D73F46 /* PryvController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PryvController.m; sourceTree = "<group>"; };
 		4ED1F90F1AB0630800B5B56E /* PryvBridge.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PryvBridge.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +106,7 @@
 		4ED1F9111AB0630800B5B56E /* PryvBridge */ = {
 			isa = PBXGroup;
 			children = (
+				4E66719D2191FB5C00419660 /* HealthKitPryvDefinitions.json */,
 				4EF08ACF210237320011529D /* PryvBridge.entitlements */,
 				4ED1F9161AB0630800B5B56E /* AppDelegate.h */,
 				4ED1F9171AB0630800B5B56E /* AppDelegate.m */,
@@ -256,6 +259,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4E66719E2191FB5C00419660 /* HealthKitPryvDefinitions.json in Resources */,
 				4ED1F91E1AB0630800B5B56E /* Main.storyboard in Resources */,
 				4ED1F9231AB0630800B5B56E /* LaunchScreen.xib in Resources */,
 				4ED1F9201AB0630800B5B56E /* Images.xcassets in Resources */,

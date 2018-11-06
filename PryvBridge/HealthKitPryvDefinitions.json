@@ -1,0 +1,24 @@
+{
+  "quantities": {
+   	"HKQuantityTypeIdentifierHeartRate": {
+   	  	"HKUnit": "count/min",
+   	  	"type": "frequency/bpm",
+   	  	"streamId": "heart"
+   	  },
+   	"HKQuantityTypeIdentifierStepCount": {
+   	  "HKUnit": "count",
+   	  	"type": "count/step",
+   	  	"streamId": "walk"
+   	  },
+   	  "HKQuantityTypeIdentifierDistanceWalkingRunning": {
+   	    "HKUnit": "m",
+   	  	"type": "length/m",
+   	  	"streamId": "walk"
+   	  },
+      "HKQuantityTypeIdentifierOxygenSaturation": {
+          "HKUnit": "%",
+          "type": "ratio/percent",
+          "streamId": "blood-saturation"
+      }
+  }
+}

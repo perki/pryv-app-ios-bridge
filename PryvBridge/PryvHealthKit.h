@@ -15,10 +15,10 @@
 
 @interface PryvHealthKit : NSObject
 
-
 + (PryvHealthKit*)sharedInstance;
 
-+ (PYEvent*) sampleToEvent:(HKSample*)sample;
+- (PYEvent*) sampleToEvent:(HKSample*)sample;
+- (NSArray<HKSampleType *> *)sampleTypes;
 
 @end
 
