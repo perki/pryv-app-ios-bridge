@@ -44,6 +44,14 @@ typedef id (^HKSampleToPryvEvent)(HKSample*);
 
 @implementation PryvHealthKit
 
+/**
+ * Map StreamId - InfoNeeded for creation
+ */
+NSMutableDictionary<NSString *, NSDictionary*> *streamsMap;
+
+/**
+ * Map HKSample{id} - Definition
+ */
 NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
 
 - (PYEvent*) sampleToEvent:(HKSample*)sample {
@@ -139,25 +147,58 @@ NSArray<HKSampleType *> *cacheSampletypes = nil;
     return cacheSampletypes;
 }
 
+/**
+ * Private Method,
+ * Recursively follow the "streams" definitions and create a flat map with
+ * streamID: { name, parentId }
+ */
+- (void) fillStreamMaprecursive:(NSDictionary*) streams withParentId:(NSString*) parentId {
+    for (NSString* key in streams) {
+        NSMutableDictionary* stream = [[NSMutableDictionary alloc]
+                                       initWithDictionary:@{@"name": streams[key][@"name"]}];
+        if (parentId != nil) {[stream setObject:parentId forKey:@"parentId"];};
+        [streamsMap setObject:stream  forKey:key];
+        NSDictionary* childs = streams[key][@"childs"];
+        if (childs != nil) {
+            [self fillStreamMaprecursive:childs withParentId:key];
+        }
+    }
+}
+
+/**
+ * During initialization
+ * a JSON file containig definitions of types is loaded
+ */
 - (void) loadDefinitions {
     NSDictionary* definitions = [PryvHealthKit JSONFromFile:@"HealthKitPryvDefinitions"];
-    NSDictionary* quantities = [definitions objectForKey:@"quantities"];
-    NSMutableDictionary<NSString*, DefinitionItem*> *defs = [[NSMutableDictionary alloc] init];
     
+    //----- streams ----------//
+    streamsMap = [[NSMutableDictionary alloc] init];
+    [self fillStreamMaprecursive:[definitions objectForKey:@"streams"] withParentId:nil];
+    
+    
+    //----- HKSampletypes ----//
+    NSMutableDictionary<NSString*, DefinitionItem*> *defs = [[NSMutableDictionary alloc] init];
+    //----- quantities ------//
+    NSDictionary* quantities = [definitions objectForKey:@"quantities"];
     for (NSString* key in quantities) {
         NSDictionary* quantity = (NSDictionary*) [quantities objectForKey:key];
         DefinitionItemQuantity* di = [[DefinitionItemQuantity alloc] init];
         di.type = kQuantity;
         di.streamId = [quantity objectForKey:@"streamId"];
+        if (streamsMap[di.streamId] == nil) {
+             [NSException raise:@"Invalid streamId in definitions"
+                         format:@"For [%@] HKUnit [%@] streamId has not been defined in streams", key, di.streamId];
+        }
         di.eventType = [quantity objectForKey:@"type"];
         @try {
             di.HKUnit = [HKUnit unitFromString: [quantity objectForKey:@"HKUnit"]];
         }
         @catch (NSException * e) {
-           [NSException raise:@"Invalid HKUnit in definitions" format:@"For %@ HKUnit %@ invalid with %@", key,  [quantity objectForKey:@"HKUnit"], e];
+           [NSException raise:@"Invalid HKUnit in definitions" format:@"For [%@] HKUnit [%@] invalid with %@", key,  [quantity objectForKey:@"HKUnit"], e];
         }
         if (di.HKUnit == nil) {
-            [NSException raise:@"Invalid HKUnit in definitions" format:@"For %@ HKUnit %@ invalid", key,  [quantity objectForKey:@"HKUnit"]];
+            [NSException raise:@"Invalid HKUnit in definitions" format:@"For [%@] HKUnit [%@] invalid", key,  [quantity objectForKey:@"HKUnit"]];
         }
         [defs setObject:di forKey:key];
     }

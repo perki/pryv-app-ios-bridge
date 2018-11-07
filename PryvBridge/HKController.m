@@ -66,7 +66,7 @@
     }
     self.healthStore = [[HKHealthStore alloc] init];
     
-    [self. healthStore requestAuthorizationToShareTypes:nil readTypes:[NSSet setWithArray:[self sampleTypes]] completion:^(BOOL success, NSError * _Nullable error) {
+    [self.healthStore requestAuthorizationToShareTypes:nil readTypes:[NSSet setWithArray:[self sampleTypes]] completion:^(BOOL success, NSError * _Nullable error) {
         // no code
     }];
     
