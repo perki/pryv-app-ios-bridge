@@ -7,6 +7,7 @@
 //
 
 #import "PryvHealthKit.h"
+#import "PryvApiKitLight.h"
 
 
 @interface PryvHealthKit ()
@@ -54,10 +55,30 @@ NSMutableDictionary<NSString *, NSDictionary*> *streamsMap;
  */
 NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
 
+- (PryvHealthKit*) init {
+    if (self = [super init]) {
+        [self loadDefinitions];
+    }
+    return self;
+}
+
++ (PryvHealthKit*)sharedInstance
+{
+    static PryvHealthKit *_sharedInstance;
+    static dispatch_once_t onceToken;
+    __block BOOL init_done = NO;
+    dispatch_once(&onceToken, ^{
+        _sharedInstance = [[PryvHealthKit alloc] init];
+        init_done = YES;
+    });
+    return _sharedInstance;
+}
+
+#pragma mark convertion
+
+
 - (PYEvent*) sampleToEvent:(HKSample*)sample {
-    
     // 1st check Type
-    
     NSString* sampleType = [[sample sampleType] identifier];
     DefinitionItem* di = [definitionsMap objectForKey:sampleType];
     if (di == nil) {
@@ -117,13 +138,7 @@ static id (^quantityHeartBeatsPerMinuteUnit)(HKSample*) = ^(HKSample* sample) {
     };
 };
 
-
-- (PryvHealthKit*) init {
-    if (self = [super init]) {
-        [self loadDefinitions];
-    }
-    return self;
-}
+#pragma mark definitions
 
 NSArray<HKSampleType *> *cacheSampletypes = nil;
 - (NSArray<HKSampleType *> *)sampleTypes {
@@ -218,17 +233,50 @@ NSArray<HKSampleType *> *cacheSampletypes = nil;
     return result;
 }
 
-+ (PryvHealthKit*)sharedInstance
-{
-    static PryvHealthKit *_sharedInstance;
-    static dispatch_once_t onceToken;
-    __block BOOL init_done = NO;
-    dispatch_once(&onceToken, ^{
-        _sharedInstance = [[PryvHealthKit alloc] init];
-        init_done = YES;
-    });
-    return _sharedInstance;
+
+#pragma mark API related
+
+/** from the streamMap return root streams to be added to permission requests **/
+- (NSArray*)getStreamsPermissions {
+    if (streamsMap == nil) {
+        [NSException raise:@"Error streamMap must be initalized" format:@""];
+        return nil;
+    }
+    NSMutableArray *permissions = [[NSMutableArray alloc] init];
+    
+    for (NSString* streamId in streamsMap) {
+        if (streamsMap[streamId][@"parentId"] == nil) { // only add non-root streams
+            [permissions addObject:@{
+                              @"streamId": streamId,
+                              @"defaultName": streamsMap[streamId][@"name"],
+                              @"level": @"manage"}];
+        }
+    }
+    return permissions;
 }
 
+- (void)ensureStreamsExists:(PryvApiKitLight*)api completionHandler:(void (^)(NSError* e))completed {
+    if (streamsMap == nil) {
+        return  [NSException raise:@"Error streamMap must be initalized" format:@""];
+    }
+    
+    NSMutableArray *batchCMD = [[NSMutableArray alloc] init];
+    
+    for (NSString* streamId in streamsMap) {
+        if (streamsMap[streamId][@"parentId"] != nil) { // only add non-root streams
+            [batchCMD addObject:@{@"method": @"streams.create",
+                                  @"params": @{
+                                        @"id": streamId,
+                                        @"name": streamsMap[streamId][@"name"],
+                                        @"parentId": streamsMap[streamId][@"parentId"]}}];
+        }
+    }
+    
+    [api postToAPI:@"" array:batchCMD completionHandler:^(NSDictionary * _Nullable response, NSError * _Nullable error) {
+        NSLog(@"Streams created");
+        // Here we may check that response codes are either "Stream Exists" or "Stream created"
+        completed(error);
+    }];
+}
 
 @end

@@ -13,6 +13,7 @@
 
 #import <PryvApiKit/PryvApiKit.h>
 #import "HKController.h"
+#import "PryvHealthKit.h"
 
 
 //
@@ -79,7 +80,7 @@
 
 /** sugar to get the active Pryv connection **/
 - (PYConnection*)pyConn {
-    return [[PryvController sharedInstance] connection];
+   return [[PryvController sharedInstance] connection];
 }
 
 - (void)checkLocationStatus {
@@ -119,7 +120,7 @@
 }
 
 - (void) pryvLocationSaved:(NSNotification *)notification {
-    [locationCount setText:[NSString stringWithFormat:@"%d",[[PryvController sharedInstance] savedLocationEvents]]];
+    [locationCount setText:[NSString stringWithFormat:@"%ld",(long)[[PryvController sharedInstance] savedLocationEvents]]];
 }
 
 - (IBAction)locationButtonPressed:(id)sender {
@@ -144,15 +145,19 @@
      *     'defaultName' : 'Pryv iOS PryvBridge',
      *      'level' : 'manage'} ]
      */
-    NSArray *permissions = @[ @{ kPYAPIConnectionRequestStreamId : kStreamId ,
+    NSMutableArray *permissions = [NSMutableArray arrayWithArray:@[ @{ kPYAPIConnectionRequestStreamId : kStreamId ,
                                  kPYAPIConnectionRequestDefaultStreamName : kStreamDefaultName,
-                                 kPYAPIConnectionRequestLevel: kPYAPIConnectionRequestManageLevel}];
+                                 kPYAPIConnectionRequestLevel: kPYAPIConnectionRequestManageLevel}]];
                               
+    //-- add root streams from PryvHealthKit
+    
+    [permissions addObjectsFromArray:[[PryvHealthKit sharedInstance] getStreamsPermissions]];
+    
     
     
     __unused
     PYWebLoginViewController *webLoginController =
-    [PYWebLoginViewController requestConnectionWithAppId:@"pryv-ios-bridge"
+    [PYWebLoginViewController requestConnectionWithAppId:@"app-ios-bridge"
                                           andPermissions:permissions
                                                 delegate:self];
     

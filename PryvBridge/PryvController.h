@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #import <CoreLocation/CoreLocation.h>
+#import "PryvApiKitLight.h"
 
 @class PYConnection;
 
@@ -33,6 +34,7 @@
 + (PryvController*)sharedInstance;
 
 @property (nonatomic, retain) PYConnection *connection;
+@property (nonatomic, retain) PryvApiKitLight *api;
 
 - (void) saveLocation:(CLLocation *)currentLocation;
 - (NSInteger) savedLocationEvents;

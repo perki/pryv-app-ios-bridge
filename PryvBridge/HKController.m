@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "PryvHealthKit.h"
+#import "PryvController.h"
 
+#import "PryvHealthKit.h"
 #import "HKController.h"
 
 
@@ -18,11 +19,11 @@
 - (void)updateDataForSampleType:(HKSampleType *)sampleType;
 - (void)saveAnchors;
 
+- (void)initPryvHealthKit;
+- (void)pryvConnectionChange:(NSNotification*)notification;
 
 @property (nonatomic, readonly) NSArray<HKSampleType *> *sampleTypes;
-
 @property (nonatomic, strong) NSMutableDictionary<NSString *, HKQueryAnchor *> *anchorDictionary;
-
 
 @end
 
@@ -57,6 +58,27 @@
 - (void)initObject
 {
     [self requestAuthorization];
+    [self initPryvHealthKit];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(pryvConnectionChange:)
+                                                 name:kAppPryvConnectionChange
+                                               object:nil];
+}
+
+BOOL PryvHealthKitInitialized = NO;
+- (void)initPryvHealthKit
+{
+    if ([PryvController sharedInstance].api == nil) {
+        PryvHealthKitInitialized = NO;
+        return;
+    }
+    if (PryvHealthKitInitialized) {
+        return;
+    }
+    PryvHealthKitInitialized = YES;
+    [[PryvHealthKit sharedInstance] ensureStreamsExists:[PryvController sharedInstance].api completionHandler:^(NSError *e) {
+        NSLog(@"#### Error ensuring Stream exists in HKCOntroller %@", e);
+    }];
 }
 
 - (void) requestAuthorization {
@@ -170,6 +192,16 @@
         return (NSMutableDictionary<NSString *, HKQueryAnchor *> *)[NSKeyedUnarchiver unarchiveObjectWithData:data];
 
     return [[NSMutableDictionary<NSString *, HKQueryAnchor *> alloc] init];
+}
+
+#pragma mark - Pryv connection chnage
+
+/**
+ * Connection changed (can be nil to remove)
+ */
+- (void)pryvConnectionChange:(NSNotification*)notification
+{
+    [self initPryvHealthKit];
 }
 
 @end

@@ -11,7 +11,6 @@
 
 #import <PryvApiKit/PryvApiKit.h>
 #import "INTULocationManager.h"
-
 #import <CoreLocation/CoreLocation.h>
 
 //
@@ -35,7 +34,9 @@ NSInteger savedEventsCount;
 BOOL registeredToLocationEvents = FALSE;
 CLLocation* lastStoredLocation;
 
+
 @synthesize connection = _connection;
+@synthesize api = _api;
 
 - (NSInteger) savedLocationEvents
 {
@@ -137,8 +138,16 @@ CLLocation* lastStoredLocation;
         [[self class] removeConnection:_connection]; // remove from the settings
     }
     _connection = pyConn;
-    [[NSNotificationCenter defaultCenter] postNotificationName:kAppPryvConnectionChange object:nil];
     [[self class] saveConnection:_connection];
+    
+    if (_connection == nil) {
+        self.api = nil;
+    } else {
+        self.api = [[PryvApiKitLight alloc] init:_connection.apiBaseUrl withAccess:_connection.accessToken];
+    }
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:kAppPryvConnectionChange object:nil];
+
 }
 
 

@@ -13,12 +13,18 @@
 #import <PryvApiKit/PryvApiKit.h>
 #import <HealthKit/HealthKit.h>
 
+#import "PryvApiKitLight.h"
+
 @interface PryvHealthKit : NSObject
 
 + (PryvHealthKit*)sharedInstance;
 
 - (PYEvent*) sampleToEvent:(HKSample*)sample;
 - (NSArray<HKSampleType *> *)sampleTypes;
+
+
+- (NSArray*)getStreamsPermissions;
+- (void)ensureStreamsExists:(PryvApiKitLight*)api completionHandler:(void (^)(NSError* e))completed;
 
 @end
 
