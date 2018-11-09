@@ -134,8 +134,7 @@ BOOL PryvHealthKitInitialized = NO;
     
     if (!anchor) {
         anchor = HKAnchoredObjectQueryNoAnchor;
-        limit = 500;
-        
+        limit = HKObjectQueryNoLimit; // HKObjectQueryNoLimit;
     }
     
     HKAnchoredObjectQuery *anchoredQuery = [[HKAnchoredObjectQuery alloc] initWithType:sampleType
@@ -146,9 +145,9 @@ BOOL PryvHealthKitInitialized = NO;
                 if (!error) {
                     for (HKSample *sample in sampleObjects) {
                         // Process Sample
-                        // [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyle]
-                        PYEvent* e = [[PryvHealthKit sharedInstance] sampleToEvent:sample];
-                        NSLog(@"Created Event: %@ %@", e.type, e.eventContent);
+                        // [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyl
+                        NSDictionary* e = [[PryvHealthKit sharedInstance] sampleToEventData:sample];
+                        NSLog(@"Created Event: %@", e);
                     }
                     
                 } else

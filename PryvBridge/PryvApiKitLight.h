@@ -22,5 +22,15 @@ typedef void (^pryvApiCompletion)(NSDictionary * _Nullable response, NSError * _
 
 @end
 
+@interface PYLEvent : NSObject
+@property NSString* streamId;
+@property NSString* type;
+@property NSDate* startDate;
+@property NSDate* stopDate;
+@property id content;
+@property NSDictionary* clientData;
+- (NSDictionary*) toDictionary;
+@end;
+
 
 #endif /* PryvApiKitLight_h */

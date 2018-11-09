@@ -96,3 +96,30 @@
 }
 
 @end
+
+@implementation PYLEvent
+@synthesize streamId, type, startDate, stopDate, content, clientData;
+- (NSDictionary*) toDictionary {
+    NSMutableDictionary* result = [NSMutableDictionary
+                                   dictionaryWithDictionary:@{
+                                                              @"type": self.type,
+                                                              @"streamId": self.streamId,
+                                                              }];
+    if (startDate) {
+        [result setObject:[NSNumber numberWithDouble:[self.startDate timeIntervalSince1970]] forKey:@"time"];
+        if (stopDate && [startDate compare:stopDate] != NSOrderedSame) {
+            [result setObject:[NSNumber numberWithDouble:[self.stopDate timeIntervalSinceDate:startDate]] forKey:@"duration"];
+        }
+    }
+    
+    if (content) {
+        [result setObject:content forKey:@"content"];
+    }
+    
+    if (clientData) {
+       [result setObject:clientData forKey:@"clientData"];
+    }
+    
+    return result;
+};
+@end;

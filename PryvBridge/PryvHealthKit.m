@@ -77,7 +77,7 @@ NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
 #pragma mark convertion
 
 
-- (PYEvent*) sampleToEvent:(HKSample*)sample {
+- (NSDictionary*) sampleToEventData:(HKSample*)sample {
     // 1st check Type
     NSString* sampleType = [[sample sampleType] identifier];
     DefinitionItem* di = [definitionsMap objectForKey:sampleType];
@@ -94,18 +94,25 @@ NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
             return nil;
         }
         
-        
-        PYEvent *event = [[PYEvent alloc] init];
-        NSDate* startDate = [sample startDate];
-        NSDate* stopDate = [sample endDate];
-        [event setEventDate:startDate];
-        if ([startDate compare:stopDate] != NSOrderedSame) {
-            [event setEventEndDate:stopDate];
+    
+        PYLEvent *event = [[PYLEvent alloc] init];
+        event.startDate = [sample startDate];
+        event.stopDate = [sample endDate];
+        event.content = [NSNumber numberWithDouble:[quantity doubleValueForUnit:unit]];
+        NSMutableDictionary* clientData = [[NSMutableDictionary alloc] init];
+        if (sample.device) {
+            [clientData setObject:[NSString stringWithFormat:@"%@",sample.device] forKey:@"healthkit:device"];
         }
-        event.eventContent = [NSNumber numberWithDouble:[quantity doubleValueForUnit:unit]];;
+        if (sample.sourceRevision) {
+            [clientData setObject:[NSString stringWithFormat:@"%@",sample.sourceRevision] forKey:@"healthkit:sourceRevision"];
+        }
+        if ([sample metadata]) {
+             [clientData setObject:sample.metadata forKey:@"healthkit:metadate"];
+        }
+        event.clientData = clientData;
         event.type = di.eventType;
         event.streamId = di.streamId;
-        return event;
+        return [event toDictionary];
     }
 
     return nil;
