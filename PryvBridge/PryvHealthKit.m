@@ -7,12 +7,14 @@
 //
 
 #import "PryvHealthKit.h"
-#import "PryvApiKitLight.h"
+#import "PryvController.h"
 
 
 @interface PryvHealthKit ()
 - (void) loadDefinitions;
 + (NSDictionary *)JSONFromFile:(NSString*)fileName;
+@property NSDictionary *definitions;
+@property PryvApiKitLight *api;
 @end
 
 typedef enum {
@@ -24,10 +26,11 @@ typedef id (^HKSampleToPryvEvent)(HKSample*);
 
 
 @interface DefinitionItem : NSObject
-    @property DefinitionType type;
-    @property NSString *eventType;
-    @property NSString *streamId;
+@property DefinitionType type;
+@property NSString *eventType;
+@property NSString *streamId;
 @end
+
 
 @implementation DefinitionItem
     @synthesize type, eventType, streamId;
@@ -44,11 +47,7 @@ typedef id (^HKSampleToPryvEvent)(HKSample*);
 
 
 @implementation PryvHealthKit
-
-/**
- * Map StreamId - InfoNeeded for creation
- */
-NSMutableDictionary<NSString *, NSDictionary*> *streamsMap;
+@synthesize definitions, api;
 
 /**
  * Map HKSample{id} - Definition
@@ -76,8 +75,10 @@ NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
 
 #pragma mark convertion
 
-
 - (NSDictionary*) sampleToEventData:(HKSample*)sample {
+    if (self.api == nil) {
+        [NSException raise:@"API not initialized" format:@""];
+    }
     // 1st check Type
     NSString* sampleType = [[sample sampleType] identifier];
     DefinitionItem* di = [definitionsMap objectForKey:sampleType];
@@ -100,14 +101,15 @@ NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
         event.stopDate = [sample endDate];
         event.content = [NSNumber numberWithDouble:[quantity doubleValueForUnit:unit]];
         NSMutableDictionary* clientData = [[NSMutableDictionary alloc] init];
+        /**
         if (sample.device) {
             [clientData setObject:[NSString stringWithFormat:@"%@",sample.device] forKey:@"healthkit:device"];
-        }
+        }**/
         if (sample.sourceRevision) {
-            [clientData setObject:[NSString stringWithFormat:@"%@",sample.sourceRevision] forKey:@"healthkit:sourceRevision"];
+            [clientData setObject:[NSString stringWithFormat:@"%@",sample.sourceRevision.source.name] forKey:@"healthkit:source"];
         }
         if ([sample metadata]) {
-             [clientData setObject:sample.metadata forKey:@"healthkit:metadate"];
+             [clientData setObject:sample.metadata forKey:@"healthkit:metadata"];
         }
         event.clientData = clientData;
         event.type = di.eventType;
@@ -169,22 +171,28 @@ NSArray<HKSampleType *> *cacheSampletypes = nil;
     return cacheSampletypes;
 }
 
-/**
- * Private Method,
- * Recursively follow the "streams" definitions and create a flat map with
- * streamID: { name, parentId }
- */
-- (void) fillStreamMaprecursive:(NSDictionary*) streams withParentId:(NSString*) parentId {
-    for (NSString* key in streams) {
-        NSMutableDictionary* stream = [[NSMutableDictionary alloc]
-                                       initWithDictionary:@{@"name": streams[key][@"name"]}];
-        if (parentId != nil) {[stream setObject:parentId forKey:@"parentId"];};
-        [streamsMap setObject:stream  forKey:key];
-        NSDictionary* childs = streams[key][@"childs"];
-        if (childs != nil) {
-            [self fillStreamMaprecursive:childs withParentId:key];
-        }
+
+
+#pragma init
+
+- (void)initWithAPI:(PryvApiKitLight*)api completionHandler:(void (^)(NSError* e))completed {
+    self.api = api;
+    if (api == nil) { return completed(nil); }
+    //----- streams ----------//
+    NSDictionary *streamsHierarchy = (NSDictionary*)[definitions objectForKey:@"streams"];
+    if (streamsHierarchy == nil) {
+        return  [NSException raise:@"Error streamsHierarchy must be initalized" format:@""];
     }
+    
+    [self.api addStreamsHierarchy:streamsHierarchy];
+    // check all streams exists
+    /**
+    if ([self.api streamById:di.streamId] == nil) { // test if stream is known
+        [NSException raise:@"Invalid streamId in definitions"
+                    format:@"For [%@] HKUnit [%@] streamId has not been defined in streams", key, di.streamId];
+    }**/
+    
+    [self.api ensureStreamCreated:completed];
 }
 
 /**
@@ -192,32 +200,22 @@ NSArray<HKSampleType *> *cacheSampletypes = nil;
  * a JSON file containig definitions of types is loaded
  */
 - (void) loadDefinitions {
-    NSDictionary* definitions = [PryvHealthKit JSONFromFile:@"HealthKitPryvDefinitions"];
-    
-    //----- streams ----------//
-    streamsMap = [[NSMutableDictionary alloc] init];
-    [self fillStreamMaprecursive:[definitions objectForKey:@"streams"] withParentId:nil];
-    
-    
+    self.definitions = [PryvHealthKit JSONFromFile:@"HealthKitPryvDefinitions"];
     //----- HKSampletypes ----//
     NSMutableDictionary<NSString*, DefinitionItem*> *defs = [[NSMutableDictionary alloc] init];
     //----- quantities ------//
-    NSDictionary* quantities = [definitions objectForKey:@"quantities"];
+    NSDictionary* quantities = [self.definitions objectForKey:@"quantities"];
     for (NSString* key in quantities) {
         NSDictionary* quantity = (NSDictionary*) [quantities objectForKey:key];
         DefinitionItemQuantity* di = [[DefinitionItemQuantity alloc] init];
         di.type = kQuantity;
         di.streamId = [quantity objectForKey:@"streamId"];
-        if (streamsMap[di.streamId] == nil) {
-             [NSException raise:@"Invalid streamId in definitions"
-                         format:@"For [%@] HKUnit [%@] streamId has not been defined in streams", key, di.streamId];
-        }
         di.eventType = [quantity objectForKey:@"type"];
         @try {
             di.HKUnit = [HKUnit unitFromString: [quantity objectForKey:@"HKUnit"]];
         }
         @catch (NSException * e) {
-           [NSException raise:@"Invalid HKUnit in definitions" format:@"For [%@] HKUnit [%@] invalid with %@", key,  [quantity objectForKey:@"HKUnit"], e];
+            [NSException raise:@"Invalid HKUnit in definitions" format:@"For [%@] HKUnit [%@] invalid with %@", key,  [quantity objectForKey:@"HKUnit"], e];
         }
         if (di.HKUnit == nil) {
             [NSException raise:@"Invalid HKUnit in definitions" format:@"For [%@] HKUnit [%@] invalid", key,  [quantity objectForKey:@"HKUnit"]];
@@ -240,50 +238,5 @@ NSArray<HKSampleType *> *cacheSampletypes = nil;
     return result;
 }
 
-
-#pragma mark API related
-
-/** from the streamMap return root streams to be added to permission requests **/
-- (NSArray*)getStreamsPermissions {
-    if (streamsMap == nil) {
-        [NSException raise:@"Error streamMap must be initalized" format:@""];
-        return nil;
-    }
-    NSMutableArray *permissions = [[NSMutableArray alloc] init];
-    
-    for (NSString* streamId in streamsMap) {
-        if (streamsMap[streamId][@"parentId"] == nil) { // only add non-root streams
-            [permissions addObject:@{
-                              @"streamId": streamId,
-                              @"defaultName": streamsMap[streamId][@"name"],
-                              @"level": @"manage"}];
-        }
-    }
-    return permissions;
-}
-
-- (void)ensureStreamsExists:(PryvApiKitLight*)api completionHandler:(void (^)(NSError* e))completed {
-    if (streamsMap == nil) {
-        return  [NSException raise:@"Error streamMap must be initalized" format:@""];
-    }
-    
-    NSMutableArray *batchCMD = [[NSMutableArray alloc] init];
-    
-    for (NSString* streamId in streamsMap) {
-        if (streamsMap[streamId][@"parentId"] != nil) { // only add non-root streams
-            [batchCMD addObject:@{@"method": @"streams.create",
-                                  @"params": @{
-                                        @"id": streamId,
-                                        @"name": streamsMap[streamId][@"name"],
-                                        @"parentId": streamsMap[streamId][@"parentId"]}}];
-        }
-    }
-    
-    [api postToAPI:@"" array:batchCMD completionHandler:^(NSDictionary * _Nullable response, NSError * _Nullable error) {
-        NSLog(@"Streams created");
-        // Here we may check that response codes are either "Stream Exists" or "Stream created"
-        completed(error);
-    }];
-}
 
 @end

@@ -2,7 +2,7 @@
   "streams": {
     "apple-healthkit": {
       "name": "Apple HealthKit",
-      "childs": {
+      "children": {
         "heart": {
           "name": "Heart"
         },
@@ -11,7 +11,7 @@
         },
         "blood": {
           "name": "Blood",
-          "childs": {
+          "children": {
             "blood-saturation": {
               "name": "Saturation"
             }

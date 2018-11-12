@@ -76,7 +76,8 @@ BOOL PryvHealthKitInitialized = NO;
         return;
     }
     PryvHealthKitInitialized = YES;
-    [[PryvHealthKit sharedInstance] ensureStreamsExists:[PryvController sharedInstance].api completionHandler:^(NSError *e) {
+    
+    [[PryvHealthKit sharedInstance] initWithAPI:[PryvController sharedInstance].api completionHandler:^(NSError *e) {
         NSLog(@"#### Error ensuring Stream exists in HKCOntroller %@", e);
     }];
 }
@@ -144,10 +145,8 @@ BOOL PryvHealthKitInitialized = NO;
             resultsHandler:^(HKAnchoredObjectQuery *query, NSArray<HKSample *> *sampleObjects, NSArray<HKDeletedObject *> *deletedObjects, HKQueryAnchor *newAnchor, NSError *error) {
                 if (!error) {
                     for (HKSample *sample in sampleObjects) {
-                        // Process Sample
-                        // [NSDateFormatter localizedStringFromDate:[NSDate date] dateStyle:NSDateFormatterShortStyle timeStyle:NSDateFormatterFullStyl
                         NSDictionary* e = [[PryvHealthKit sharedInstance] sampleToEventData:sample];
-                        NSLog(@"Created Event: %@", e);
+                        
                     }
                     
                 } else

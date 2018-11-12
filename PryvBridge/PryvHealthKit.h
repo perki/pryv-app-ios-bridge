@@ -19,10 +19,11 @@
 - (NSDictionary*) sampleToEventData:(HKSample*)sample;
 - (NSArray<HKSampleType *> *)sampleTypes;
 - (NSArray*)getStreamsPermissions;
-- (void)ensureStreamsExists:(PryvApiKitLight*)api completionHandler:(void (^)(NSError* e))completed;
+/**
+ * Set Api (null to erase)
+ */
+- (void)initWithAPI:(PryvApiKitLight*)api completionHandler:(void (^)(NSError* e))completed;
 @end
-
-
 
 
 #endif /* PryvHealthKit_h */
