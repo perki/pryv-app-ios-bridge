@@ -11,13 +11,14 @@
 
 
 #import <HealthKit/HealthKit.h>
-
+#import "PryvHealthKit.h"
 @class HKController;
 
 
 @interface HKController : NSObject
 
 + (HKController*)sharedInstance;
+- (void)observeHealthKitWith:(PryvHealthKit*)pyHK;
 
 @property (nonatomic, retain) HKHealthStore* healthStore;
 

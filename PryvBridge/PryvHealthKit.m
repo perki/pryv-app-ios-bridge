@@ -8,11 +8,13 @@
 
 #import "PryvHealthKit.h"
 #import "PryvController.h"
+#import "HKController.h"
 
 
 @interface PryvHealthKit ()
 - (void) loadDefinitions;
 + (NSDictionary *)JSONFromFile:(NSString*)fileName;
+- (void)pryvConnectionChange:(NSNotification*)notification;
 @property NSDictionary *definitions;
 @property PryvApiKitLight *api;
 @end
@@ -57,6 +59,10 @@ NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
 - (PryvHealthKit*) init {
     if (self = [super init]) {
         [self loadDefinitions];
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(pryvConnectionChange:)
+                                                     name:kAppPryvConnectionChange
+                                                   object:nil]; // only start querying and observation if API is on
     }
     return self;
 }
@@ -175,6 +181,10 @@ NSArray<HKSampleType *> *cacheSampletypes = nil;
 
 #pragma init
 
+- (BOOL)initalizedAPI {
+    return (self.api == nil);
+}
+
 - (void)initWithAPI:(PryvApiKitLight*)api completionHandler:(void (^)(NSError* e))completed {
     self.api = api;
     if (api == nil) { return completed(nil); }
@@ -236,6 +246,23 @@ NSArray<HKSampleType *> *cacheSampletypes = nil;
         [NSException raise:@"Error parsing JSON definition files" format:@"Error: %@ ", e];
     }
     return result;
+}
+
+#pragma mark - Pryv connection chnage
+
+/**
+ * Connection changed (can be nil to remove)
+ */
+- (void)pryvConnectionChange:(NSNotification*)notification
+{
+    if ([PryvController sharedInstance].api == nil) {
+        self.api = nil;
+        return;
+    }
+    self.api = [PryvController sharedInstance].api;
+    [self initWithAPI:[PryvController sharedInstance].api completionHandler:^(NSError *e) {
+        [[HKController sharedInstance] observeHealthKitWith:self]; // start Health Observation
+    }];
 }
 
 

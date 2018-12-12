@@ -16,6 +16,7 @@
 
 @interface PryvHealthKit : NSObject
 + (PryvHealthKit*)sharedInstance;
+- (BOOL)initalizedAPI; // return YES if ready
 - (NSDictionary*) sampleToEventData:(HKSample*)sample;
 - (NSArray<HKSampleType *> *)sampleTypes;
 - (NSArray*)getStreamsPermissions;

@@ -55,9 +55,6 @@ typedef void (^pryvApiCompletion)(NSDictionary * _Nullable response, NSError * _
 - (void)ensureStreamCreated:(void (^)(NSError* e))completed;
 - (PYLStream*)streamById:(NSString*)streamId;
 
-
-
-
 @end
 
 

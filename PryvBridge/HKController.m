@@ -19,12 +19,10 @@
 - (void)updateDataForSampleType:(HKSampleType *)sampleType;
 - (void)saveAnchors;
 
-- (void)initPryvHealthKit;
-- (void)pryvConnectionChange:(NSNotification*)notification;
-
 @property (nonatomic, readonly) NSArray<HKSampleType *> *sampleTypes;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, HKQueryAnchor *> *anchorDictionary;
 
+@property (nonatomic, strong) PryvHealthKit* pyHK;
 @end
 
 
@@ -57,30 +55,9 @@
 
 - (void)initObject
 {
-    [self requestAuthorization];
-    [self initPryvHealthKit];
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(pryvConnectionChange:)
-                                                 name:kAppPryvConnectionChange
-                                               object:nil];
+    [self requestAuthorization]; // request authorization
 }
 
-BOOL PryvHealthKitInitialized = NO;
-- (void)initPryvHealthKit
-{
-    if ([PryvController sharedInstance].api == nil) {
-        PryvHealthKitInitialized = NO;
-        return;
-    }
-    if (PryvHealthKitInitialized) {
-        return;
-    }
-    PryvHealthKitInitialized = YES;
-    
-    [[PryvHealthKit sharedInstance] initWithAPI:[PryvController sharedInstance].api completionHandler:^(NSError *e) {
-        NSLog(@"#### Error ensuring Stream exists in HKCOntroller %@", e);
-    }];
-}
 
 - (void) requestAuthorization {
     if ([HKHealthStore isHealthDataAvailable] == NO) {
@@ -92,16 +69,14 @@ BOOL PryvHealthKitInitialized = NO;
     [self.healthStore requestAuthorizationToShareTypes:nil readTypes:[NSSet setWithArray:[self sampleTypes]] completion:^(BOOL success, NSError * _Nullable error) {
         // no code
     }];
-    
-    [self observeHealthKit];
-    
 }
 
 
 #pragma mark - Public Instance Methods
 
-- (void)observeHealthKit {
-    for (HKSampleType *sample in self.sampleTypes) {
+- (void)observeHealthKitWith:(PryvHealthKit*)pyHK {
+
+    for (HKSampleType *sample in self.sampleTypes) { // for each sample
         if ([self.healthStore authorizationStatusForType:sample] != HKAuthorizationStatusNotDetermined) {
             HKObserverQuery *observationQuery = [[HKObserverQuery alloc] initWithSampleType:sample predicate:nil
               updateHandler:^(HKObserverQuery *query, HKObserverQueryCompletionHandler completionHandler, NSError *error) {
@@ -145,15 +120,23 @@ BOOL PryvHealthKitInitialized = NO;
             resultsHandler:^(HKAnchoredObjectQuery *query, NSArray<HKSample *> *sampleObjects, NSArray<HKDeletedObject *> *deletedObjects, HKQueryAnchor *newAnchor, NSError *error) {
                 if (!error) {
                     for (HKSample *sample in sampleObjects) {
-                        NSDictionary* e = [[PryvHealthKit sharedInstance] sampleToEventData:sample];
-                        
+                        if (self.pyHK) {
+                            NSDictionary* e = [self.pyHK sampleToEventData:sample];
+                        } else {
+                            NSLog(@"NO pyHK");
+                        }
                     }
                     
                 } else
                 NSLog(@"Error fetching data for HKSampleType with identifier %@: %@", query.sampleType.identifier, error.localizedDescription);
                 
             }];
-    [self.healthStore executeQuery:anchoredQuery];
+    
+    if (self.pyHK) {
+        [self.healthStore executeQuery:anchoredQuery];
+    } else {
+         NSLog(@"NO pyHK 2");
+    }
     
 }
 
@@ -192,14 +175,5 @@ BOOL PryvHealthKitInitialized = NO;
     return [[NSMutableDictionary<NSString *, HKQueryAnchor *> alloc] init];
 }
 
-#pragma mark - Pryv connection chnage
-
-/**
- * Connection changed (can be nil to remove)
- */
-- (void)pryvConnectionChange:(NSNotification*)notification
-{
-    [self initPryvHealthKit];
-}
 
 @end
