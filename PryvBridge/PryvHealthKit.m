@@ -8,61 +8,49 @@
 
 #import "PryvHealthKit.h"
 #import "PryvController.h"
-#import "HKController.h"
+#import "PryvHealthKit+Observer.h"
+#import "PryvHealthKit+Definitions.h"
 
 
-@interface PryvHealthKit ()
-- (void) loadDefinitions;
-+ (NSDictionary *)JSONFromFile:(NSString*)fileName;
-- (void)pryvConnectionChange:(NSNotification*)notification;
-@property NSDictionary *definitions;
-@property PryvApiKitLight *api;
-@end
-
-typedef enum {
-    kQuantity,
-} DefinitionType;
-
-
-typedef id (^HKSampleToPryvEvent)(HKSample*);
-
-
-@interface DefinitionItem : NSObject
-@property DefinitionType type;
-@property NSString *eventType;
-@property NSString *streamId;
-@end
-
+#pragma mark Definitions
 
 @implementation DefinitionItem
-    @synthesize type, eventType, streamId;
-@end
-
-@interface DefinitionItemQuantity : DefinitionItem
-    @property HKUnit *HKUnit;
+@synthesize type, eventType, streamId;
 @end
 
 @implementation DefinitionItemQuantity
-     @synthesize HKUnit;
+@synthesize HKUnit;
 @end
 
+#pragma end Definitions
+
+
+@interface PryvHealthKit ()
+
+- (void)pryvConnectionChange:(NSNotification*)notification;
+
+@end
 
 
 @implementation PryvHealthKit
 @synthesize definitions, api;
 
-/**
- * Map HKSample{id} - Definition
- */
-NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
+/** for Observer **/
+@synthesize healthStore, anchorDictionary;
+
+/** for Definitions **/
+@synthesize definitionsMap;
 
 - (PryvHealthKit*) init {
     if (self = [super init]) {
         [self loadDefinitions];
+        [self initObserver];
         [[NSNotificationCenter defaultCenter] addObserver:self
-                                                 selector:@selector(pryvConnectionChange:)
+                                                selector:@selector(pryvConnectionChange:)
                                                      name:kAppPryvConnectionChange
                                                    object:nil]; // only start querying and observation if API is on
+        
+        [self pryvConnectionChange:nil];
     }
     return self;
 }
@@ -86,10 +74,10 @@ NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
         [NSException raise:@"API not initialized" format:@""];
     }
     // 1st check Type
-    NSString* sampleType = [[sample sampleType] identifier];
-    DefinitionItem* di = [definitionsMap objectForKey:sampleType];
+
+    DefinitionItem* di = [self definitionItemForHKSampleType:sample];
     if (di == nil) {
-        NSLog(@"Unkown sample %@ ## %@", [sample sampleType], sample);
+        NSLog(@"Unkown sample %@ ## %@", [sample sampleType], [[sample sampleType] identifier]);
         return nil;
     }
     
@@ -153,30 +141,11 @@ static id (^quantityHeartBeatsPerMinuteUnit)(HKSample*) = ^(HKSample* sample) {
     };
 };
 
-#pragma mark definitions
 
-NSArray<HKSampleType *> *cacheSampletypes = nil;
-- (NSArray<HKSampleType *> *)sampleTypes {
-    if (cacheSampletypes != nil) {
-        return cacheSampletypes;
-    }
-    NSMutableArray* types = [[NSMutableArray alloc] init];
-    for (NSString* key in definitionsMap) {
-        DefinitionItem* di = [definitionsMap objectForKey:key];
-        if (di.type == kQuantity) {
-            HKQuantityType* qt = [HKQuantityType quantityTypeForIdentifier:key];
-            if (qt == nil) {
-                [NSException raise:@"Invalid quantityTypeForIdentifier" format:@"Identifier %@ is invalid", key];
-            }
-            [types addObject:qt];
-        } else {
-            [NSException raise:@"Unkown type in definitions" format:@"type for %@ is unkown", key];
-        }
-    }
-    cacheSampletypes = types;
-    return cacheSampletypes;
+- (NSArray*)getStreamsPermissions {
+    NSLog(@"TODO XXXXXXX");
+    return nil;
 }
-
 
 
 #pragma init
@@ -205,49 +174,6 @@ NSArray<HKSampleType *> *cacheSampletypes = nil;
     [self.api ensureStreamCreated:completed];
 }
 
-/**
- * During initialization
- * a JSON file containig definitions of types is loaded
- */
-- (void) loadDefinitions {
-    self.definitions = [PryvHealthKit JSONFromFile:@"HealthKitPryvDefinitions"];
-    //----- HKSampletypes ----//
-    NSMutableDictionary<NSString*, DefinitionItem*> *defs = [[NSMutableDictionary alloc] init];
-    //----- quantities ------//
-    NSDictionary* quantities = [self.definitions objectForKey:@"quantities"];
-    for (NSString* key in quantities) {
-        NSDictionary* quantity = (NSDictionary*) [quantities objectForKey:key];
-        DefinitionItemQuantity* di = [[DefinitionItemQuantity alloc] init];
-        di.type = kQuantity;
-        di.streamId = [quantity objectForKey:@"streamId"];
-        di.eventType = [quantity objectForKey:@"type"];
-        @try {
-            di.HKUnit = [HKUnit unitFromString: [quantity objectForKey:@"HKUnit"]];
-        }
-        @catch (NSException * e) {
-            [NSException raise:@"Invalid HKUnit in definitions" format:@"For [%@] HKUnit [%@] invalid with %@", key,  [quantity objectForKey:@"HKUnit"], e];
-        }
-        if (di.HKUnit == nil) {
-            [NSException raise:@"Invalid HKUnit in definitions" format:@"For [%@] HKUnit [%@] invalid", key,  [quantity objectForKey:@"HKUnit"]];
-        }
-        [defs setObject:di forKey:key];
-    }
-    definitionsMap = defs;
-    cacheSampletypes = nil; // reset Sample Types Cache
-};
-
-+ (NSDictionary *)JSONFromFile:(NSString*)fileName {
-    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:path];
-    NSError *e = nil;
-    NSDictionary* result = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&e];
-    
-    if (!result) {
-        [NSException raise:@"Error parsing JSON definition files" format:@"Error: %@ ", e];
-    }
-    return result;
-}
-
 #pragma mark - Pryv connection chnage
 
 /**
@@ -261,7 +187,7 @@ NSArray<HKSampleType *> *cacheSampletypes = nil;
     }
     self.api = [PryvController sharedInstance].api;
     [self initWithAPI:[PryvController sharedInstance].api completionHandler:^(NSError *e) {
-        [[HKController sharedInstance] observeHealthKitWith:self]; // start Health Observation
+        [self observeHealthKit]; // start Health Observation
     }];
 }
 

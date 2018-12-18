@@ -20,7 +20,8 @@
 		4ED1F92F1AB0630800B5B56E /* PryvBridgeTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED1F92E1AB0630800B5B56E /* PryvBridgeTests.m */; };
 		4EF08ACE210225AD0011529D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF08ACD210225AD0011529D /* CoreLocation.framework */; };
 		4EF08AD1210237320011529D /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4EF08AD0210237320011529D /* HealthKit.framework */; };
-		4EF08AD3210259120011529D /* HKController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF08AD2210259120011529D /* HKController.m */; };
+		4EF08AD3210259120011529D /* PryvHealthKit+Observer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF08AD2210259120011529D /* PryvHealthKit+Observer.m */; };
+		4EF6E19321C91329009A4301 /* PryvHealthKit+Definitions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4EF6E19221C91329009A4301 /* PryvHealthKit+Definitions.m */; };
 		F6BF85E249F8DF2234DA6525 /* libPods-PryvBridge.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 73BF15DB26339C295907937F /* libPods-PryvBridge.a */; };
 /* End PBXBuildFile section */
 
@@ -58,8 +59,10 @@
 		4EF08ACD210225AD0011529D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		4EF08ACF210237320011529D /* PryvBridge.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PryvBridge.entitlements; sourceTree = "<group>"; };
 		4EF08AD0210237320011529D /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
-		4EF08AD2210259120011529D /* HKController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HKController.m; sourceTree = "<group>"; };
-		4EF08AD42102592A0011529D /* HKController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HKController.h; sourceTree = "<group>"; };
+		4EF08AD2210259120011529D /* PryvHealthKit+Observer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "PryvHealthKit+Observer.m"; sourceTree = "<group>"; };
+		4EF08AD42102592A0011529D /* PryvHealthKit+Observer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PryvHealthKit+Observer.h"; sourceTree = "<group>"; };
+		4EF6E19121C91329009A4301 /* PryvHealthKit+Definitions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PryvHealthKit+Definitions.h"; sourceTree = "<group>"; };
+		4EF6E19221C91329009A4301 /* PryvHealthKit+Definitions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "PryvHealthKit+Definitions.m"; sourceTree = "<group>"; };
 		73BF15DB26339C295907937F /* libPods-PryvBridge.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PryvBridge.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BEFDAB9A73C15D17555EEE1 /* Pods-PryvBridge.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PryvBridge.release.xcconfig"; path = "Pods/Target Support Files/Pods-PryvBridge/Pods-PryvBridge.release.xcconfig"; sourceTree = "<group>"; };
 		B8E8A548865C3A8DB3EB5687 /* Pods-PryvBridge.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PryvBridge.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PryvBridge/Pods-PryvBridge.debug.xcconfig"; sourceTree = "<group>"; };
@@ -119,8 +122,10 @@
 				4E66719F219363C100419660 /* PryvApiKitLight.m */,
 				4E3BF506214D090E00B84AAA /* PryvHealthKit.h */,
 				4E3BF504214D08E900B84AAA /* PryvHealthKit.m */,
-				4EF08AD42102592A0011529D /* HKController.h */,
-				4EF08AD2210259120011529D /* HKController.m */,
+				4EF08AD42102592A0011529D /* PryvHealthKit+Observer.h */,
+				4EF08AD2210259120011529D /* PryvHealthKit+Observer.m */,
+				4EF6E19121C91329009A4301 /* PryvHealthKit+Definitions.h */,
+				4EF6E19221C91329009A4301 /* PryvHealthKit+Definitions.m */,
 				4ED1F9191AB0630800B5B56E /* ViewController.h */,
 				4ED1F91A1AB0630800B5B56E /* ViewController.m */,
 				4ED1F91C1AB0630800B5B56E /* Main.storyboard */,
@@ -328,8 +333,9 @@
 				4E3BF505214D08E900B84AAA /* PryvHealthKit.m in Sources */,
 				4ED1F91B1AB0630800B5B56E /* ViewController.m in Sources */,
 				4E6671A0219363C100419660 /* PryvApiKitLight.m in Sources */,
+				4EF6E19321C91329009A4301 /* PryvHealthKit+Definitions.m in Sources */,
 				4ED1F9181AB0630800B5B56E /* AppDelegate.m in Sources */,
-				4EF08AD3210259120011529D /* HKController.m in Sources */,
+				4EF08AD3210259120011529D /* PryvHealthKit+Observer.m in Sources */,
 				4ED1F9151AB0630800B5B56E /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

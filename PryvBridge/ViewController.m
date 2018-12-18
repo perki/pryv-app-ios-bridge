@@ -12,7 +12,6 @@
 #import "PryvController.h"
 
 #import <PryvApiKit/PryvApiKit.h>
-#import "HKController.h"
 #import "PryvHealthKit.h"
 
 
@@ -62,9 +61,6 @@
     // --- Initialize location Event
     [[PryvController sharedInstance] registerToLocationEvents];
     
-    // --- Health Kit
-    
-    [HKController sharedInstance]; // initialize Health Kit 
     
      
 }
@@ -161,6 +157,10 @@
                                           andPermissions:permissions
                                                 delegate:self];
     
+}
+
+- (IBAction) healthButtonPressed: (id) sender  {
+    [PryvHealthKit sharedInstance];
 }
 
 /**

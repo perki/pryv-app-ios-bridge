@@ -14,16 +14,51 @@
 
 #import "PryvApiKitLight.h"
 
+#pragma mark Definitions
+
+typedef enum {
+    kQuantity,
+} DefinitionType;
+
+typedef id (^HKSampleToPryvEvent)(HKSample*);
+
+
+@interface DefinitionItem : NSObject
+@property DefinitionType type;
+@property NSString *eventType;
+@property NSString *streamId;
+@end
+
+@interface DefinitionItemQuantity : DefinitionItem
+@property HKUnit *HKUnit;
+@end
+
+#pragma mark End Definitions
+
 @interface PryvHealthKit : NSObject
 + (PryvHealthKit*)sharedInstance;
 - (BOOL)initalizedAPI; // return YES if ready
 - (NSDictionary*) sampleToEventData:(HKSample*)sample;
-- (NSArray<HKSampleType *> *)sampleTypes;
+
+
 - (NSArray*)getStreamsPermissions;
+
 /**
  * Set Api (null to erase)
  */
 - (void)initWithAPI:(PryvApiKitLight*)api completionHandler:(void (^)(NSError* e))completed;
+
+@property NSDictionary *definitions;
+@property PryvApiKitLight *api;
+
+
+/** For Observer */
+@property (nonatomic, retain) HKHealthStore* healthStore;
+@property (nonatomic, strong) NSMutableDictionary<NSString *, HKQueryAnchor *> *anchorDictionary;
+
+/** For Definitions */
+@property (nonatomic, strong) NSDictionary<NSString *, DefinitionItem*> *definitionsMap;
+
 @end
 
 

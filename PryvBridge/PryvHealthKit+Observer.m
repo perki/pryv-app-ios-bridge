@@ -10,51 +10,18 @@
 #import "PryvController.h"
 
 #import "PryvHealthKit.h"
-#import "HKController.h"
+#import "PryvHealthKit+Observer.h"
+#import "PryvHealthKit+Definitions.h"
 
 
-@interface HKController ()
-- (void)requestAuthorization;
-- (void)observeHealthKit;
-- (void)updateDataForSampleType:(HKSampleType *)sampleType;
-- (void)saveAnchors;
 
-@property (nonatomic, readonly) NSArray<HKSampleType *> *sampleTypes;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, HKQueryAnchor *> *anchorDictionary;
-
-@property (nonatomic, strong) PryvHealthKit* pyHK;
-@end
+@implementation PryvHealthKit (Observer)
 
 
-@implementation HKController
 
-@synthesize healthStore = _healthStore;
-
-
-+ (HKController*)sharedInstance
+- (void)initObserver
 {
-    static HKController *_sharedInstance;
-    static dispatch_once_t onceToken;
-    __block BOOL init_done = NO;
-    dispatch_once(&onceToken, ^{
-        _sharedInstance = [[HKController alloc] init];
-        init_done = YES;
-    });
-    if (init_done) [_sharedInstance initObject];
-    return _sharedInstance;
-}
-
-
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        self.anchorDictionary = [self _anchorDictFromStorage];
-    }
-    return self;
-}
-
-- (void)initObject
-{
+    self.anchorDictionary = [self _anchorDictFromStorage];
     [self requestAuthorization]; // request authorization
 }
 
@@ -74,7 +41,7 @@
 
 #pragma mark - Public Instance Methods
 
-- (void)observeHealthKitWith:(PryvHealthKit*)pyHK {
+- (void)observeHealthKit {
 
     for (HKSampleType *sample in self.sampleTypes) { // for each sample
         if ([self.healthStore authorizationStatusForType:sample] != HKAuthorizationStatusNotDetermined) {
@@ -83,7 +50,7 @@
                   if (error)
                   NSLog(@"Error observing changes to HKSampleType with identifier %@: %@", query.sampleType.identifier, error.localizedDescription);
                   else {
-                      [[HKController sharedInstance] updateDataForSampleType:query.sampleType];
+                      [self updateDataForSampleType:query.sampleType];
                   }
                   completionHandler();
               }];
@@ -120,11 +87,9 @@
             resultsHandler:^(HKAnchoredObjectQuery *query, NSArray<HKSample *> *sampleObjects, NSArray<HKDeletedObject *> *deletedObjects, HKQueryAnchor *newAnchor, NSError *error) {
                 if (!error) {
                     for (HKSample *sample in sampleObjects) {
-                        if (self.pyHK) {
-                            NSDictionary* e = [self.pyHK sampleToEventData:sample];
-                        } else {
-                            NSLog(@"NO pyHK");
-                        }
+                        NSDictionary* e = [self sampleToEventData:sample];
+                        // TODO save this event
+                        NSLog(@"%@", e);
                     }
                     
                 } else
@@ -132,11 +97,7 @@
                 
             }];
     
-    if (self.pyHK) {
-        [self.healthStore executeQuery:anchoredQuery];
-    } else {
-         NSLog(@"NO pyHK 2");
-    }
+    [self.healthStore executeQuery:anchoredQuery];
     
 }
 
@@ -148,22 +109,6 @@
 }
 
 
-- (NSArray<HKSampleType *> *)sampleTypes {
-    
-    return [[PryvHealthKit sharedInstance] sampleTypes];
-    
-    HKQuantityType *steps = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierStepCount];
-    HKQuantityType *distance = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierDistanceWalkingRunning];
-    HKQuantityType *energyBurnedActive = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierActiveEnergyBurned];
-    HKQuantityType *energyBurnedResting = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBasalEnergyBurned];
-    HKQuantityType *heartRate = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierHeartRate];
-    HKQuantityType *bloodPressureSystolic = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureSystolic];
-    HKQuantityType *bloodPressureDiastolic = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodPressureDiastolic];
-    HKQuantityType *bloodSugar = [HKQuantityType quantityTypeForIdentifier:HKQuantityTypeIdentifierBloodGlucose];
-    
-    return @[steps, distance, energyBurnedActive, energyBurnedResting, energyBurnedActive, heartRate, bloodPressureSystolic, bloodPressureDiastolic, bloodSugar];
-    
-}
 
 #pragma mark - Private Instance Methods
 

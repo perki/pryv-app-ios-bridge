@@ -64,6 +64,9 @@
                                 <rect key="frame" x="16" y="274" width="87" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <state key="normal" title="Authorize"/>
+                                <connections>
+                                    <action selector="healthButtonPressed:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="u2y-us-eFg"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pV8-td-ELU">
                                 <rect key="frame" x="5" y="76" width="87" height="30"/>

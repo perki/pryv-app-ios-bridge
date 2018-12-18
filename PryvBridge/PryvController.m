@@ -51,7 +51,7 @@ CLLocation* lastStoredLocation;
     __block NSInteger num = 0 + registeredBlocks;
     [locMgr subscribeToSignificantLocationChangesWithBlock:^(CLLocation *currentLocation, INTULocationAccuracy achievedAccuracy, INTULocationStatus status) {
         if (status == INTULocationStatusSuccess) {
-            NSLog(@"Got location %ld / %ld",num, registeredBlocks);
+            NSLog(@"Got location %ld / %ld", (long) num, (long) registeredBlocks);
             [[PryvController sharedInstance] saveLocation:currentLocation];
         }
     }];
@@ -69,11 +69,13 @@ CLLocation* lastStoredLocation;
             [lastStoredLocation distanceFromLocation:currentLocation] < (currentLocation.horizontalAccuracy * 2)) {
             // if distance between now and last one is smaller that 2x accurancy .. ignore
             
-        NSLog(@"Ignoring because of accurancy %d", [NSNumber numberWithFloat:currentLocation.horizontalAccuracy]);
+        NSLog(@"Ignoring because of accurancy %d", (int) [NSNumber numberWithFloat:currentLocation.horizontalAccuracy]);
            return;
         }
         if (lastStoredLocation != nil) {
-         NSLog(@"Saved bad accurancy of %d because distance is %d ", [NSNumber numberWithFloat:currentLocation.horizontalAccuracy], [lastStoredLocation distanceFromLocation:currentLocation]);
+         NSLog(@"Saved bad accurancy of %d because distance is %d ",
+               (int) [NSNumber numberWithFloat:currentLocation.horizontalAccuracy],
+               (int) [lastStoredLocation distanceFromLocation:currentLocation]);
         }
         
     }
